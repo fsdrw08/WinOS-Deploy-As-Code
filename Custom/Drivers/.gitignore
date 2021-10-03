@@ -1,0 +1,5 @@
+*
+!.gitignore
+!*.ps1
+!*.bat
+!*.md
