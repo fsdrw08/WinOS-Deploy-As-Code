@@ -25,27 +25,28 @@ $edgeDriver = New-Object OpenQA.Selenium.Edge.EdgeDriver($edgeDriverOptions)
 
 $edgeDriver.Navigate().GoToUrl("https://www.microsoft.com/en-us/software-download/windows10ISO")
 
-$byXPath = [OpenQA.Selenium.By]::XPath('//*[@id="product-edition"]')
+Start-Sleep -Seconds 5
 
-$edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="product-edition"]')).Click()
+$edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="product-edition"]/optgroup/option[@value="2033"]')).Click()
 
-$byXPath = [OpenQA.Selenium.By]::XPath('//*[@id="submit-product-edition"]')
+$edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="submit-product-edition"]')).Click()
 
-$edgeDriver.FindElement($byXPath).Click()
+Start-Sleep -Seconds 7
 
+$edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="product-languages"]/option[11]')).Click()
 
+$edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="submit-sku"]')).Click()
 
+Start-Sleep -Seconds 7
 
-$edgeDriver.FindElement([string]"ClassName",'mscom-accordion-item-title').Click()
-
-
+$link = $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="card-info-content"]/div/div[1]/div/a')).getattribute('href')
 
 $edgeDriver.Quit()
 
-$options = New-SeDriverOptions -Browser Chrome -UserAgent "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25"
+$indexofFirstLetter = $link.Substring(0,$link.IndexOf("?")).LastIndexOf("/")+1
 
-Start-SeDriver -Options $options -WebDriverPath "C:\Users\drw_0\source\repos\WinOS-Deploy-As-Code\WebDriver\edgedriver_win64\" 
+$lengthOfFileName = $link.IndexOf("?")-$indexofFirstLetter
 
-Stop-SeDriver
+$fileName = $link.Substring($indexofFirstLetter,$lengthOfFileName)
 
-Get-SeElement -By XPath 
+Start-BitsTransfer -Source $link -Destination (Join-Path "C:\Users\drw_0\source\repos\WinOS-Deploy-As-Code\" $fileName)
