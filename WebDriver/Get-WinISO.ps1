@@ -7,6 +7,7 @@ if ((Test-Path $workingPath\WebDriver.dll) -and (Test-Path $workingPath\msedgedr
 }
 
 Add-Type -Path "$($workingPath)\WebDriver.dll"
+Add-Type -Path "$($workingPath)\WebDriver.Support.dll"
 
 $edgeDriverOptions = New-Object OpenQA.Selenium.Edge.EdgeOptions
 
@@ -18,19 +19,36 @@ $edgeDriver.Navigate().GoToUrl("https://www.microsoft.com/en-us/software-downloa
 
 Start-Sleep -Seconds 3
 
-# 2021 may update
-$edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="product-edition"]/optgroup/option[@value="2033"]')).Click()
+# Select edition drop down list (Windows 10)
+# $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="product-edition"]/optgroup/option[@value="2033"]')).Click()
+# use selectbytext instead <- should be more stable than find by xpath (value is not constant)
+$proEdition_Element = $edgeDriver.FindElement([OpenQA.Selenium.By]::Id("product-edition"))
+$proEdition_Selection = [OpenQA.Selenium.Support.UI.SelectElement]::new($proEdition_Element)
+$proEdition_Selection.SelectByText("Windows 10")
 
 $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="submit-product-edition"]')).Click()
 
 Start-Sleep -Seconds 3
 
-# en-us
-$edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="product-languages"]/option[11]')).Click()
-
+# Select the product language (English)
+# $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="product-languages"]/option[11]')).Click()
+# https://sqa.stackexchange.com/a/46477
+$prodLanguage_Element = $edgeDriver.FindElement([OpenQA.Selenium.By]::Id("product-languages"))
+$prodLanguage_Selection = [OpenQA.Selenium.Support.UI.SelectElement]::new($prodLanguage_Element)
+$prodLanguage_Selection.SelectByText("English")
 $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="submit-sku"]')).Click()
 
 Start-Sleep -Seconds 5
+
+# Select download list
+$edgeDriver.FindElements([OpenQA.Selenium.By]::ClassName("product-download-type")).GetAttribute('href')
+$downloadLinks_Element = $edgeDriver.FindElement([OpenQA.Selenium.By]::Id("SoftwareDownload_DownloadLinks"))
+$downloadLinks_Element.FindElement([OpenQA.Selenium.By]::ClassName("product-download-type")).GetAttribute('href')
+
+$downloadLinks_Selection = [OpenQA.Selenium.Support.UI.SelectElement]::new($downloadLinks_Element)
+$downloadLinks_Selection.SelectByText("64-bit Download")
+
+
 
 $ISODownloadLink = $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="card-info-content"]/div/div[1]/div/a')).getattribute('href')
 

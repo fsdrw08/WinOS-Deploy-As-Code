@@ -100,8 +100,8 @@ function Get-WebDriver {
     )
     
     # https://stackoverflow.com/questions/3344855/which-net-version-is-my-powershell-script-using
-    if ($DotNetVersion = [System.Runtime.InteropServices.RuntimeInformation]::FrameworkDescription) {
-        $DotNetVersion = $DotNetVersion = [System.Runtime.InteropServices.RuntimeInformation]::FrameworkDescription
+    if ([System.Runtime.InteropServices.RuntimeInformation]::FrameworkDescription) {
+        $DotNetVersion = [System.Runtime.InteropServices.RuntimeInformation]::FrameworkDescription
     }  else {
         $DotNetVersion = [System.Runtime.InteropServices.RuntimeInformation, mscorlib]::FrameworkDescription
     }
