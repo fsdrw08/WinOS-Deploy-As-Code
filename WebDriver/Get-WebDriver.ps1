@@ -107,21 +107,33 @@ function Get-WebDriver {
     }
     
     "detect selenium web driver download link"
-    $SeDriver_Site = "www.selenium.dev/downloads/"
+    $SeDriver_Site = "https://www.nuget.org/packages/Selenium.WebDriver/"
     $SeDriver_Link = (Invoke-WebRequest -Uri $SeDriver_Site -UseBasicParsing).Links.Href | Where-Object {$_ -match "nuget.org/api/v2"} | Select-Object -Unique
+    $seSupport_Site = "https://www.nuget.org/packages/Selenium.Support/"
+    $seSupport_Link = (Invoke-WebRequest -Uri $seSupport_Site -UseBasicParsing).Links.Href | Where-Object {$_ -match "nuget.org/api/v2"} | Select-Object -Unique
 
     "fetching file name"
-    $LastIndexof = $SeDriver_Link.LastIndexOf("/")
-    $LastSecondIndexof = $SeDriver_Link.Substring(0,$LastIndexof).LastIndexOf("/")
-    $packageName = $SeDriver_Link.Substring($LastSecondIndexof+1,$LastIndexof-$LastSecondIndexof-1)
-    $packageVersion = $SeDriver_Link.Substring($LastIndexof+1,$SeDriver_Link.Length-$LastIndexof-1)
-    $SeDriver_nupkg = $packageName+"."+$packageVersion+".nupkg"
+    $SeDriver_LastIndexof = $SeDriver_Link.LastIndexOf("/")
+    $SeDriver_LastSecondIndexof = $SeDriver_Link.Substring(0,$SeDriver_LastIndexof).LastIndexOf("/")
+    $SeDriver_packageName = $SeDriver_Link.Substring($SeDriver_LastSecondIndexof+1,$SeDriver_LastIndexof-$SeDriver_LastSecondIndexof-1)
+    $SeDriver_packageVersion = $SeDriver_Link.Substring($SeDriver_LastIndexof+1,$SeDriver_Link.Length-$SeDriver_LastIndexof-1)
+    $SeDriver_nupkg = $SeDriver_packageName+"."+$SeDriver_packageVersion+".nupkg"
+
+    $seSupport_LastIndexof = $seSupport_Link.LastIndexOf("/")
+    $seSupport_LastSecondIndexof = $seSupport_Link.Substring(0,$seSupport_LastIndexof).LastIndexOf("/")
+    $seSupport_packageName = $seSupport_Link.Substring($seSupport_LastSecondIndexof+1,$seSupport_LastIndexof-$seSupport_LastSecondIndexof-1)
+    $seSupport_packageVersion = $seSupport_Link.Substring($seSupport_LastIndexof+1,$seSupport_Link.Length-$seSupport_LastIndexof-1)
+    $seSupport_nupkg = $seSupport_packageName+"."+$seSupport_packageVersion+".nupkg"
 
     "selenium nupkg download link and file name"
     $SeDriver_Link
     $SeDriver_nupkg
 
+    $seSupport_Link
+    $seSupport_nupkg
+    
     Invoke-WebRequest -Uri $SeDriver_Link -UseBasicParsing -OutFile (Join-Path $Destination $SeDriver_nupkg) -Verbose
+    Invoke-WebRequest -Uri $seSupport_Link -UseBasicParsing -OutFile (Join-Path $Destination $seSupport_nupkg) -Verbose
 
     $targetDLL = "net" + ($DotNetVersion -replace "[^\d]", '').Substring(0,2)
 
