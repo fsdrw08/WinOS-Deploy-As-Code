@@ -66,4 +66,4 @@ $lengthOfFileName = $downloadLink.IndexOf("?")-$indexofFirstLetter
 
 $isoFileName = $downloadLink.Substring($indexofFirstLetter,$lengthOfFileName)
 
-Start-BitsTransfer -Source $downloadLink -Destination (Join-Path (Split-Path $workingPath) $isoFileName) -Confirm -WhatIf
+Start-BitsTransfer -Source $downloadLink -Destination (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName) -Confirm -WhatIf

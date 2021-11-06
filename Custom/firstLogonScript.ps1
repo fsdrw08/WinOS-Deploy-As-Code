@@ -54,6 +54,39 @@ MACCP
 "#7.1. Rename Computer"
 Rename-Computer -newname (Read-Host "PC new name")
 
+"set current user password
+ref: https://codeandkeep.com/Powershell-Read-Password/"
+
+function Read-Password {
+    $pass=Read-Host -Prompt 'Enter a Password' `
+      -AsSecureString 
+    $pass2=Read-Host -Prompt 'Re-type Password' `
+      -AsSecureString 
+    $bstr=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass)
+    $plain=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
+    [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+    $bstr2=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass2)
+    $plain2=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr2)
+    [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr2)
+    [bool]$pValid=$true
+    $builder=New-Object -TypeName Text.StringBuilder
+    if ($plain -cne $plain2){
+      $pValid=$false
+      [void]$builder.Append('Passwords do not match, input again ')
+    }
+    if ($plain.Length -lt 1){
+        $pValid=$false
+        [void]$builder.Append('You input nothing. ')
+      }
+    if($pValid -eq $false){
+        Write-Warning -Message $builder.ToString()
+        Read-Password
+    }else{
+        Get-LocalUser $env:USERNAME | Set-LocalUser -Password $pass
+    }
+  }
+  Read-Password
+
 # "#7.2. Join Domain"
 # Add-Computer -domainname  -cred (get-credential domain\ServiceAccount) -Options JoinWithNewName -passthru -verbose
 

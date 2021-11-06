@@ -135,7 +135,7 @@
                     <Order>1</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>Powershell -executionpolicy Bypass -File &quot;D:\Custom\firstLogonScript.ps1&quot;</CommandLine>
+                    <CommandLine>Powershell -executionpolicy Bypass -File &quot;D:\WinOS-Deploy-As-Code\Custom\firstLogonScript.ps1&quot;</CommandLine>
                     <Order>2</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                     <Description>run powershell</Description>
