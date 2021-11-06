@@ -12,8 +12,8 @@ Add-WindowsPackage -Online -PackagePath "$PSScriptRoot\Language\Microsoft-Window
 "# Config WinRM"
 & $PSScriptRoot\Scripts\ConfigureRemotingForAnsible.ps1
 
-"# Install 7zip"
-choco install 7zip.install --source="$PSScriptRoot\Software\" -y
+# "# Install 7zip"
+# choco install 7zip.install --source="$PSScriptRoot\Software\" -y
 #. MSIEXEC.EXE /i "D:\Install\7z1900-x64.msi" /qn /wait
 
 # "#5. Install AdobeDC"
@@ -59,8 +59,17 @@ Rename-Computer -newname (Read-Host "PC new name")
 
 Start-Sleep 8
 
-"#9. Work around logoncount 1 issue"
+"#9. Work around logoncount 1 issue
+ref: https://docs.microsoft.com/en-us/windows-hardware/customize/desktop/unattend/microsoft-windows-shell-setup-autologon-logoncount"
 reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoLogonCount /t REG_DWORD /d 0 /f
+
+"set PC sleep after 5 hours
+ref: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options"
+powercfg -change -standby-timeout-ac 300
+
+"set PC turn off screen after 5 hours
+ref: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options"
+powercfg -change monitor-timeout-ac 30
 
 "# enable Hyper-V"
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
