@@ -1,7 +1,7 @@
+# https://community.chocolatey.org/packages/7zip.install/19.0
+# https://community.chocolatey.org/packages/chocolatey-core.extension
 @"
 https://community.chocolatey.org/packages/chocolatey
-https://community.chocolatey.org/packages/7zip.install/19.0
-https://community.chocolatey.org/packages/chocolatey-core.extension
 "@ -split "`r`n" | ForEach-Object {
     $downloadLink = (Invoke-WebRequest -Uri $_ -UseBasicParsing).Links.Href | Where-Object {$_ -match "v2/package"} | Select-Object -Unique
     $downloadLink

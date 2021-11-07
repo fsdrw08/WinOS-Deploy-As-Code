@@ -2,7 +2,7 @@
 # This is where you see the top level API - with xml to Packages - should look nearly the same as https://chocolatey.org/api/v2/
 # If you are using Nexus, always add the trailing slash or it won't work
 # === EDIT HERE ===
-$packageRepo = "$PSScriptRoot\..\Software\chocolatey.0.11.2.nupkg"
+$packageRepo = "$PSScriptRoot\..\Software\Chocolatey"
 
 # If the above $packageRepo repository requires authentication, add the username and password here. Otherwise these leave these as empty strings.
 $repoUsername = ''    # this must be empty is NOT using authentication
@@ -37,8 +37,8 @@ $securePassword = ConvertTo-SecureString $repoPassword -AsPlainText -Force
 $repoCreds = New-Object System.Management.Automation.PSCredential ($repoUsername, $securePassword)
 }
 
-#$searchUrl = ($packageRepo.Trim('/'), 'Packages()?$filter=(Id%20eq%20%27chocolatey%27)%20and%20IsLatestVersion') -join '/'
-$searchUrl = $packageRepo
+$searchUrl = ($packageRepo.Trim('/'), 'Packages()?$filter=(Id%20eq%20%27chocolatey%27)%20and%20IsLatestVersion') -join '/'
+# $searchUrl = $packageRepo
 
 # Reroute TEMP to a local location
 New-Item $env:ALLUSERSPROFILE\choco-cache -ItemType Directory -Force

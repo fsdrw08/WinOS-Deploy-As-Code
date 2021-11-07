@@ -91,16 +91,16 @@
         <component name="Microsoft-Windows-PnpCustomizationsNonWinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <DriverPaths>
                 <PathAndCredentials wcm:action="add" wcm:keyValue="1">
-                    <Path>D:\Custom\Drivers</Path>
+                    <Path>D:\WinOS-Deploy-As-Code\Drivers</Path>
                 </PathAndCredentials>
                 <PathAndCredentials wcm:action="add" wcm:keyValue="4">
-                    <Path>F:\Custom\Drivers</Path>
+                    <Path>F:\WinOS-Deploy-As-Code\Drivers</Path>
                 </PathAndCredentials>
                 <PathAndCredentials wcm:action="add" wcm:keyValue="3">
-                    <Path>E:\Custom\Drivers</Path>
+                    <Path>E:\WinOS-Deploy-As-Code\Drivers</Path>
                 </PathAndCredentials>
                 <PathAndCredentials wcm:action="add" wcm:keyValue="2">
-                    <Path>C:\Custom\Drivers</Path>
+                    <Path>C:\WinOS-Deploy-As-Code\Drivers</Path>
                 </PathAndCredentials>
             </DriverPaths>
         </component>
@@ -135,7 +135,7 @@
                     <Order>1</Order>
                 </SynchronousCommand>
                 <SynchronousCommand wcm:action="add">
-                    <CommandLine>Powershell -executionpolicy Bypass -File &quot;D:\WinOS-Deploy-As-Code\Custom\firstLogonScript.ps1&quot;</CommandLine>
+                    <CommandLine>Powershell -executionpolicy Bypass -File &quot;D:\WinOS-Deploy-As-Code\oobeSystem\firstLogonScript.ps1&quot;</CommandLine>
                     <Order>2</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                     <Description>run powershell</Description>
