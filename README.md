@@ -1,5 +1,5 @@
-# windows-bare-metal-infrastructure-as-code
-make windows (10+) client bare metal standalone (USB) deployment as code as possible
+# windows standalone media deployment template
+a template to make windows (10+) client bare metal standalone media (USB) deployment as code as possible
 
 according to this tutorial
 
