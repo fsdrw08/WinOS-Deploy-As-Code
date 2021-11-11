@@ -68,15 +68,15 @@ function Get-MSEdgeDriver {
         # https://msedgewebdriverstorage.z22.web.core.windows.net/
         "64-bit" { 
             $msedgeVersion = Get-ChildItem "C:\Program Files (x86)\Microsoft\Edge\Application" | `
-                                Where-Object {$_.Name -match "^\d"} | `
-                                Select-Object -ExpandProperty name 
+                                Where-Object {$_.Name -match "^\d"} | Sort-Object -Descending |`
+                                Select-Object -ExpandProperty name -First 1
             $msedgeDriver_Link = "https://msedgedriver.azureedge.net/$($msedgeVersion)/edgedriver_win64.zip"
             $msedgeDriver_Zip = "edgedriver_win64.zip"
         }
         "32-bit" { 
             $msedgeVersion = Get-ChildItem "C:\Program Files\Microsoft\Edge\Application" | `
-                                Where-Object {$_.Name -match "^\d"} | `
-                                Select-Object -ExpandProperty name 
+                                Where-Object {$_.Name -match "^\d"} | Sort-Object -Descending |`
+                                Select-Object -ExpandProperty name -Last 1
             $msedgeDriver_Link = "https://msedgedriver.azureedge.net/$($msedgeVersion)/edgedriver_win32.zip"
             $msedgeDriver_Zip = "edgedriver_win32.zip"
         }
@@ -89,7 +89,7 @@ function Get-MSEdgeDriver {
     Start-BitsTransfer -Source $msedgeDriver_Link -Destination (Join-Path $Destination $msedgeDriver_Zip)
 
     "extract msedgedriver.exe"
-    Invoke-Expression -Command "7z e (Join-Path $Destination $msedgeDriver_Zip) -o$Destination msedgedriver.exe -r"
+    Invoke-Expression -Command "7z e (Join-Path $Destination $msedgeDriver_Zip) -o$Destination msedgedriver.exe -aoa -r"
 
 }
 
@@ -138,7 +138,7 @@ function Get-WebDriver {
     $targetDLL = "net" + ($DotNetVersion -replace "[^\d]", '').Substring(0,2)
 
     if ($targetDLL) {
-        Invoke-Expression -Command "7z e (Join-Path $($Destination) $($SeDriver_nupkg)) -o$Destination lib\$($targetDll)\WebDriver.dll -r"
+        Invoke-Expression -Command "7z e (Join-Path $($Destination) $($SeDriver_nupkg)) -o$Destination lib\$($targetDll)\WebDriver.dll -aoa -r"
 }
 }
 
