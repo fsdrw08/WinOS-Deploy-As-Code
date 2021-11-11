@@ -15,7 +15,9 @@ $edgeDriverOptions.AddArguments("--user-agent=Mozilla/5.0 (iPad; CPU OS 6_0 like
 
 $edgeDriver = New-Object OpenQA.Selenium.Edge.EdgeDriver($edgeDriverOptions)
 
-$edgeDriver.Navigate().GoToUrl("https://www.microsoft.com/en-us/software-download/windows10ISO")
+$url = "https://www.microsoft.com/en-us/software-download/windows11"
+# $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
+$edgeDriver.Navigate().GoToUrl("$url")
 
 # Select edition drop down list (Windows 10)
 # $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="product-edition"]/optgroup/option[@value="2033"]')).Click()
@@ -28,7 +30,9 @@ $edgeDriver_Wait.PollingInterval = 500
 
 $proEdition_Element = $edgeDriver.FindElement([OpenQA.Selenium.By]::Id("product-edition"))
 $proEdition_Selection = [OpenQA.Selenium.Support.UI.SelectElement]::new($proEdition_Element)
-$proEdition_Selection.SelectByText("Windows 10")
+$version = "Windows 11"
+# $version = "Windows 10"
+$proEdition_Selection.SelectByText("$Version")
 Start-Sleep -Seconds 1
 $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="submit-product-edition"]')).Click()
 
