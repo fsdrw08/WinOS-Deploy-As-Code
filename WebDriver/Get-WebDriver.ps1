@@ -67,16 +67,15 @@ function Get-MSEdgeDriver {
         # https://devblogs.microsoft.com/scripting/use-powershell-to-look-for-phone-numbers-in-text/
         # https://msedgewebdriverstorage.z22.web.core.windows.net/
         "64-bit" { 
-            $msedgeVersion = Get-ChildItem "C:\Program Files (x86)\Microsoft\Edge\Application" | `
-                                Where-Object {$_.Name -match "^\d"} | Sort-Object -Descending |`
-                                Select-Object -ExpandProperty name -First 1
+            # https://stackoverflow.com/questions/46440429/get-microsoft-edge-browser-version-using-registry-or-command-line
+            $msedgeVersion = (Get-Item "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe").VersionInfo | `
+                                Select-Object -ExpandProperty FileVersion
             $msedgeDriver_Link = "https://msedgedriver.azureedge.net/$($msedgeVersion)/edgedriver_win64.zip"
             $msedgeDriver_Zip = "edgedriver_win64.zip"
         }
         "32-bit" { 
-            $msedgeVersion = Get-ChildItem "C:\Program Files\Microsoft\Edge\Application" | `
-                                Where-Object {$_.Name -match "^\d"} | Sort-Object -Descending |`
-                                Select-Object -ExpandProperty name -Last 1
+            $msedgeVersion = (Get-Item "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe").VersionInfo | `
+                                Select-Object -ExpandProperty FileVersion
             $msedgeDriver_Link = "https://msedgedriver.azureedge.net/$($msedgeVersion)/edgedriver_win32.zip"
             $msedgeDriver_Zip = "edgedriver_win32.zip"
         }
