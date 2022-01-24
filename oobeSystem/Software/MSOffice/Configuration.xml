@@ -14,7 +14,7 @@
       <Language ID="en-us" />
     </Product>
   </Add>
-  <Property Name="SharedComputerLicensing" Value="1" />
+  <!-- <Property Name="SharedComputerLicensing" Value="1" /> -->
   <Property Name="SCLCacheOverride" Value="0" />
   <Property Name="AUTOACTIVATE" Value="0" />
   <Property Name="FORCEAPPSHUTDOWN" Value="FALSE" />
