@@ -1,11 +1,11 @@
 [CmdletBinding()]
 param (
-    [Parameter(Mandatory = $true)]
-    [ValidateNotNullOrEmpty()]
-    [ValidateSet('10','11')]
+    # [Parameter(Mandatory = $true)]
+    # [ValidateNotNullOrEmpty()]
+    # [ValidateSet('10','11')]
     [int16]
-    $WindowsVersion,
-    [Parameter(Mandatory = $true)]
+    $WindowsVersion = "10",
+    # [Parameter(Mandatory = $true)]
     [string]
     $Language="English"
 )
@@ -14,8 +14,8 @@ begin {
     # $workingPath = "$env:userprofile\source\repos\WinOS-Deploy-As-Code\WebDriver"
     $workingPath = $PSScriptRoot
 
-    if ((Test-Path $workingPath\WebDriver.dll) -and (Test-Path $workingPath\msedgedriver.exe)) {
-        "$true"
+    if (!(Test-Path "$($workingPath)\WebDriver.dll") -or !(Test-Path "$($workingPath)\WebDriver.Support.dll")) {
+    . $PSScriptRoot\Get-WebDriver.ps1
     }
 
     Add-Type -Path "$($workingPath)\WebDriver.dll"
@@ -108,7 +108,8 @@ process {
     })
     # $proEdition_Element = $edgeDriver.FindElement([OpenQA.Selenium.By]::Id("product-edition"))
     $proEdition_Selection = [OpenQA.Selenium.Support.UI.SelectElement]::new($proEdition_Element)
-    $proEdition_Selection.SelectByText("Windows $WindowsVersion")
+    # $proEdition_Selection.SelectByText("Windows $WindowsVersion *")
+    $proEdition_Selection.SelectByIndex(1)
     # Start-Sleep -Seconds 1
     $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath('//*[@id="submit-product-edition"]')).Click()
     
@@ -155,6 +156,19 @@ end {
     
     $isoFileName = $downloadLink.Substring($indexofFirstLetter,$lengthOfFileName)
     
-    Start-BitsTransfer -Source $downloadLink -Destination (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName) -Confirm -WhatIf
+    $Title = "Get-WinISO"
+    $Info = "download the iso to $(Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName) in powershell now?"
+    $options = [System.Management.Automation.Host.ChoiceDescription[]] @("&Yes", "&No")
+    [int]$defaultchoice = 1
+    $opt = $host.UI.PromptForChoice($Title , $Info , $Options, $defaultchoice)
+    switch($opt) {
+        0 { 
+            Write-Host "download now" -ForegroundColor Yellow
+            Start-BitsTransfer -Source $downloadLink -Destination (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName) -Confirm -WhatIf
+        }
+        1 { 
+            Write-Host "Cancel" -ForegroundColor Green
+        }
+    }
     
 }

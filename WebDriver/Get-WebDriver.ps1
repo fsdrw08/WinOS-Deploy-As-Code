@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param (
     [Parameter()]
-    [switch]$Force,
+    [switch]$Force = $true,
     [Parameter()]
     [string]$Destination = $PSScriptRoot
 )
@@ -21,13 +21,13 @@ if ((Test-Path $Destination\msedgedriver.exe) -and !$Force) {
     $opt = $host.UI.PromptForChoice($Title , $Info , $Options,$defaultchoice)
     switch($opt)
     {
-    0 { Write-Host "Override msedgedriver.exe" -ForegroundColor Yellow
-        # Get-MSEdgeDriver -Destination $Destination
-        $overrideMSEdge = $true
-    }
-    1 { Write-Host "Cancel" -ForegroundColor Green
-        $overrideMSEdge = $false
-    }
+        0 { Write-Host "Override msedgedriver.exe" -ForegroundColor Yellow
+            # Get-MSEdgeDriver -Destination $Destination
+            $overrideMSEdge = $true
+        }
+        1 { Write-Host "Cancel" -ForegroundColor Green
+            $overrideMSEdge = $false
+        }
     }
 } else {
     $overrideMSEdge = $true
@@ -87,6 +87,8 @@ function Get-MSEdgeDriver {
     "Download edge webdriver"
     Start-BitsTransfer -Source $msedgeDriver_Link -Destination (Join-Path $Destination $msedgeDriver_Zip)
 
+    Start-Sleep -Seconds 3
+
     "extract msedgedriver.exe"
     Invoke-Expression -Command "7z e (Join-Path $Destination $msedgeDriver_Zip) -o$Destination msedgedriver.exe -aoa -r"
 
@@ -138,6 +140,7 @@ function Get-WebDriver {
 
     if ($targetDLL) {
         Invoke-Expression -Command "7z e (Join-Path $($Destination) $($SeDriver_nupkg)) -o$Destination lib\$($targetDll)\WebDriver.dll -aoa -r"
+        Invoke-Expression -Command "7z e (Join-Path $($Destination) $($seSupport_nupkg)) -o$Destination lib\$($targetDll)\WebDriver.Support.dll -aoa -r"
 }
 }
 
