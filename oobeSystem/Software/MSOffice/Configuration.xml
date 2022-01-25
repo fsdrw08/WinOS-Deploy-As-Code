@@ -1,6 +1,6 @@
 <Configuration ID="2b9adbea-e925-4990-8a1c-0ae8eb0a15b0">
   <Add OfficeClientEdition="64" Channel="Current">
-    <Product ID="O365BusinessRetail">
+    <Product ID="O365ProPlusRetail">
       <Language ID="en-us" />
       <Language ID="zh-cn" />
       <ExcludeApp ID="Access" />

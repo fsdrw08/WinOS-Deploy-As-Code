@@ -11,15 +11,15 @@ param (
 )
 begin {
 
-    # $workingPath = "$env:userprofile\source\repos\WinOS-Deploy-As-Code\WebDriver"
+    # $workingPath = "D:\WinOS-Deploy-As-Code\WebDriver"
     $workingPath = $PSScriptRoot
 
     if (!(Test-Path "$($workingPath)\WebDriver.dll") -or !(Test-Path "$($workingPath)\WebDriver.Support.dll")) {
     . $PSScriptRoot\Get-WebDriver.ps1
     }
 
-    Add-Type -Path "$($workingPath)\WebDriver.dll"
-    Add-Type -Path "$($workingPath)\WebDriver.Support.dll" #-PassThru
+    Add-Type -Path "$workingPath\WebDriver.dll"
+    Add-Type -Path "$workingPath\WebDriver.Support.dll" #-PassThru
     # ref: https://github.com/sergueik/powershell_selenium/blob/master/powershell/page_ready.ps1
     # Add-Type -TypeDefinition @"
     # using System;
@@ -57,7 +57,9 @@ begin {
         "10" {
             $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
           }
-        Default {}
+        Default {
+            $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
+        }
     }
 
 }
@@ -164,7 +166,7 @@ end {
     switch($opt) {
         0 { 
             Write-Host "download now" -ForegroundColor Yellow
-            Start-BitsTransfer -Source $downloadLink -Destination (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName) -Confirm -WhatIf
+            Start-BitsTransfer -Source $downloadLink -Destination (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName) -Confirm
         }
         1 { 
             Write-Host "Cancel" -ForegroundColor Green

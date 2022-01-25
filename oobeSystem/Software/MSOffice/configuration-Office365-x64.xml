@@ -14,15 +14,12 @@
     <Product ID="O365ProPlusRetail">
       <Language ID="en-us" />
     </Product>
-    <Product ID="VisioProRetail">
-      <Language ID="en-us" />
-    </Product>
   </Add>
 
-  <!--  <Updates Enabled="TRUE" Channel="Current" /> -->
+   <Updates Enabled="TRUE" Channel="Current" />
 
-  <!--  <Display Level="None" AcceptEULA="TRUE" />  -->
+   <Display Level="Full" AcceptEULA="TRUE" /> 
 
-  <!--  <Property Name="AUTOACTIVATE" Value="1" />  -->
+  <Property Name="AUTOACTIVATE" Value="0" />
 
 </Configuration>
