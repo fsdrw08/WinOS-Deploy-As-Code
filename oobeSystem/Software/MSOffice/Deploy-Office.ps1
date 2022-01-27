@@ -1,12 +1,13 @@
 
-# $workingPath = "D:\WinOS-Deploy-As-Code\WebDriver"
+# $workingPath = "D:\WinOS-Deploy-As-Code\oobeSystem\Software\MSOffice"
 $workingPath = $PSScriptRoot
-if (!(Test-Path "$($workingPath)\WebDriver.dll") -or !(Test-Path "$($workingPath)\WebDriver.Support.dll")) {
-. $PSScriptRoot\Get-WebDriver.ps1
+$webDriverPath = $workingPath | Split-Path | Split-Path | Split-Path | Join-Path -ChildPath "WebDriver"
+if (!(Test-Path "$webDriverPath\WebDriver.dll") -or !(Test-Path "$($webDriverPath)\WebDriver.Support.dll")) {
+    . $webDriverPath\Get-WebDriver.ps1
 }
 
-Add-Type -Path "$workingPath\WebDriver.dll"
-Add-Type -Path "$workingPath\WebDriver.Support.dll"
+Add-Type -Path "$webDriverPath\WebDriver.dll"
+Add-Type -Path "$webDriverPath\WebDriver.Support.dll"
 
 $url = "https://docs.microsoft.com/en-us/officeupdates/odt-release-history"
 
@@ -14,7 +15,28 @@ $edgeDriverOptions = New-Object OpenQA.Selenium.Edge.EdgeOptions
 
 # https://csharp.hotexamples.com/examples/OpenQA.Selenium.Chrome/ChromeOptions/AddUserProfilePreference/php-chromeoptions-adduserprofilepreference-method-examples.html
 # https://stackoverflow.com/questions/61608942/selenium-edge-chromium-browser-direct-option-to-set-default-download-path/70847078#70847078
-$edgeDriverOptions.AddUserProfilePreference("download.default_directory", "D:\WinOS-Deploy-As-Code\oobeSystem\Software\MSOffice")
+# https://mcpmag.com/articles/2019/05/01/monitor-windows-folder-for-new-files.aspx
+
+$File = "$workingPath\officedeploymenttool*.exe"
+$FilePath = Split-Path $File -Parent
+$FileName = Split-Path $File -Leaf
+
+$Action = {
+    $path = $event.SourceEventArgs.FullPath
+    $changetype = $event.SourceEventArgs.ChangeType
+    Write-Host "$path was $changetype at $(get-date)"
+    $edgeDriver.Quit()
+    Get-EventSubscriber | Unregister-Event
+}
+
+$Watcher = New-Object IO.FileSystemWatcher $FilePath, $FileName -Property @{ 
+    IncludeSubdirectories = $false
+    EnableRaisingEvents = $true
+}
+
+Register-ObjectEvent -InputObject $watcher -EventName 'Renamed' -Action $action
+
+$edgeDriverOptions.AddUserProfilePreference("download.default_directory", "$workingPath")
 $edgeDriver = New-Object OpenQA.Selenium.Edge.EdgeDriver($edgeDriverOptions)
 $edgeDriver.Navigate().GoToUrl("$url")
 
@@ -25,7 +47,7 @@ $edgeDriver.Navigate().GoToUrl("$url")
 # https://www.softwaretestinghelp.com/selenium-find-element-by-text/#Difference_between_Text_Link_Text_and_Partial_Link_Text_Methods
 $edgeDriver.FindElement([OpenQA.Selenium.By]::XPath("//*[contains(text(),'Download Office Deployment Tool')]")).Click()
 
-$edgeDriver.Quit()
+# $edgeDriver.Quit()
 
 $downloadLink = "https://download.microsoft.com/download/2/7/A/27AF1BE6-DD20-4CB4-B154-EBAB8A7D4A7E/officedeploymenttool_14527-20178.exe"
 $destination = $PSScriptRoot
