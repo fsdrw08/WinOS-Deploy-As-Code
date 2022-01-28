@@ -3,23 +3,24 @@ param (
     # [Parameter(Mandatory = $true)]
     # [ValidateNotNullOrEmpty()]
     # [ValidateSet('10','11')]
-    [int16]
-    $WindowsVersion = "10",
+    # [int16]
+    # $WindowsVersion = "10",
     # [Parameter(Mandatory = $true)]
     [string]
     $Language="English"
 )
 begin {
 
-    # $workingPath = "D:\WinOS-Deploy-As-Code\WebDriver"
+    # $workingPath = "D:\WinOS-Deploy-As-Code\Download-WinISO"
     $workingPath = $PSScriptRoot
+    $webDriverPath = $workingPath | Split-Path | Join-Path -ChildPath "WebDriver"
 
-    if (!(Test-Path "$($workingPath)\WebDriver.dll") -or !(Test-Path "$($workingPath)\WebDriver.Support.dll")) {
-    . $PSScriptRoot\Get-WebDriver.ps1
+    if (!(Test-Path "$($workingPath)\WebDriver.dll") -or !(Test-Path "$webDriverPath\WebDriver.Support.dll")) {
+    . $webDriverPath\Download-WebDriver.ps1
     }
 
-    Add-Type -Path "$workingPath\WebDriver.dll"
-    Add-Type -Path "$workingPath\WebDriver.Support.dll" #-PassThru
+    Add-Type -Path "$webDriverPath\WebDriver.dll"
+    Add-Type -Path "$webDriverPath\WebDriver.Support.dll" #-PassThru
     # ref: https://github.com/sergueik/powershell_selenium/blob/master/powershell/page_ready.ps1
     # Add-Type -TypeDefinition @"
     # using System;
@@ -44,28 +45,19 @@ begin {
     #         }
     #     }
     # }
-    # "@ -ReferencedAssemblies 'System.dll','System.Data.dll', "$workingPath\WebDriver.dll","$workingPath\WebDriver.Support.dll"
+    # "@ -ReferencedAssemblies 'System.dll','System.Data.dll', "$webDriverPath\WebDriver.dll","$webDriverPath\WebDriver.Support.dll"
 
     $edgeDriverOptions = New-Object OpenQA.Selenium.Edge.EdgeOptions
 
     $edgeDriverOptions.AddArguments("--user-agent=Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25")
 
-    switch ($WindowsVersion) {
-        "11" {
-            $url = "https://www.microsoft.com/en-us/software-download/windows11"
-          }
-        "10" {
-            $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
-          }
-        Default {
-            $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
-        }
-    }
+    $url = $url = "https://www.microsoft.com/en-us/software-download/windows11"
 
 }
 
 process {
     $edgeDriver = New-Object OpenQA.Selenium.Edge.EdgeDriver($edgeDriverOptions)
+    
     $edgeDriver.Navigate().GoToUrl("$url")
     
     # Select edition drop down list (Windows 10)
@@ -88,19 +80,9 @@ process {
             [ValidateNotNullOrEmpty()]
             [string]$target
         )
-        
-        begin {
-            
-        }
-        
-        process {
-            
-        }
-        
-        end {
-            return $EdgeDriver.FindElement([OpenQA.Selenium.By]::$by($target))
-        }
+        return $EdgeDriver.FindElement([OpenQA.Selenium.By]::$by($target))
     }
+    
     # https://coderoad.ru/38360545/%D0%9C%D0%BE%D0%B6%D0%BD%D0%BE-%D0%BB%D0%B8-%D0%B8%D1%81%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D1%8C-LINQ-%D0%B2-PowerShell
     # http://reza-aghaei.com/net-action-func-delegate-lambda-expression-in-powershell/
     # https://www.selenium.dev/selenium/docs/api/dotnet/?topic=html/T_OpenQA_Selenium_Support_UI_WebDriverWait.htm

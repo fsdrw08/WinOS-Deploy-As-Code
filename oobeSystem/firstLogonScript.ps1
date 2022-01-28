@@ -49,7 +49,9 @@ if (-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like 
 }
 
 "Install Chocolatey"
-& $PSScriptRoot\Software\Chocolatey\ChocolateyInstall.ps1
+if (Test-Path -Path "$PSScriptRoot\Software\Chocolatey\chocolatey*nupkg") {
+  & $PSScriptRoot\Software\Chocolatey\ChocolateyInstall.ps1
+}
 
 "Config WinRM"
 & $PSScriptRoot\Config\ConfigureRemotingForAnsible.ps1
@@ -63,7 +65,9 @@ if (-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like 
 # Start-Process -FilePath "$PSScriptRoot\Software\AcroRdrDC1901020064_MUI.exe" -ArgumentList "/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES" -Wait
 
 "Install o365"
-Start-Process -FilePath "$PSScriptRoot\Software\MSOffice\setup.exe" -ArgumentList "/configure `"$PSScriptRoot\Software\MSOffice\configuration.xml`"" -Wait
+if (Test-Path -Path "$PSScriptRoot\Software\MSOffice\setup.exe") {
+  Start-Process -FilePath "$PSScriptRoot\Software\MSOffice\setup.exe" -ArgumentList "/configure `"$PSScriptRoot\Software\MSOffice\configuration.xml`"" -Wait
+}
 # . "D:\Resources\O365_x64_CN\setup.exe" /configure "D:\Resources\O365_x64_CN\configuration.xml"
 
 # "Install MS TEAMS"

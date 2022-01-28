@@ -1,7 +1,6 @@
 download some software required from firstlogonscript:
 chocolatey
 https://community.chocolatey.org/packages/chocolatey
-https://community.chocolatey.org/api/v2/package/chocolatey/0.11.2
 
 7zip choco package:
 https://community.chocolatey.org/packages/7zip.install/
