@@ -45,7 +45,7 @@ ipconfig /registerdns
 "# install language package"
 if (-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*zh-cn*"}) -and `
     (Test-Path "$PSScriptRoot\Langpacks\Microsoft-Windows-Client-Language-Pack_x64_zh-cn_20h2.cab")) {
-  Add-WindowsPackage -Online -PackagePath "$PSScriptRoot\Langpacks\Microsoft-Windows-Client-Language-Pack_x64_zh-cn_20h2.cab"
+  Add-WindowsPackage -Online -PackagePath "$PSScriptRoot\Langpacks\Microsoft-Windows-Client-Language-Pack_x64_zh-cn.cab"
 }
 
 "Install Chocolatey"
