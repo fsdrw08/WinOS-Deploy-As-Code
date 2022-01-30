@@ -5,7 +5,7 @@ if (!(Test-Path "$workingPath\officedeploymenttool*.exe")) {
     . $workingPath\Download-ODT.ps1
 }
 
-$odtexe = Get-ChildItem $workingPath | Where-Object -FilterScript {$_.Name -like '*.exe'} | Select-Object -ExpandProperty Name
+$odtexe = Get-ChildItem $workingPath | Where-Object -FilterScript {$_.Name -like 'officedeploymenttool*.exe'} | Select-Object -ExpandProperty Name
 
 Start-Sleep -Seconds 3
 # extra the deployment tool
