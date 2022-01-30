@@ -1,0 +1,1 @@
+powershell -ExecutionPolicy bypass -File "%~dp0\Download-Win11ISO.ps1"

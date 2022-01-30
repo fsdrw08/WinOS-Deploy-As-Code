@@ -15,7 +15,7 @@ begin {
     $workingPath = $PSScriptRoot
     $webDriverPath = $workingPath | Split-Path | Join-Path -ChildPath "WebDriver"
 
-    if (!(Test-Path "$($workingPath)\WebDriver.dll") -or !(Test-Path "$webDriverPath\WebDriver.Support.dll")) {
+    if (!(Test-Path "$($webDriverPath)\WebDriver.dll") -or !(Test-Path "$webDriverPath\WebDriver.Support.dll")) {
     . $webDriverPath\Download-WebDriver.ps1
     }
 
@@ -160,11 +160,15 @@ end {
     switch($opt) {
         0 { 
             Write-Host "download now" -ForegroundColor Yellow
-            Start-BitsTransfer -Source $downloadLink -Destination (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName) -Confirm
+            # Start-BitsTransfer -Source $downloadLink -Destination (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName)
+            # Invoke-WebRequest -Uri $downloadLink -UseBasicParsing -OutFile (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName)
+            $WebClient = New-Object System.Net.WebClient
+            $WebClient.DownloadFile($downloadLink, (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName))
         }
         1 { 
             Write-Host "Cancel" -ForegroundColor Green
         }
     }
+    Pause
     
 }
