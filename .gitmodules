@@ -1,0 +1,4 @@
+[submodule "oobeSystem/Software/Chocolatey"]
+	path = oobeSystem/Software/Chocolatey
+	url = https://github.com/fsdrw08/Install-ChocoOffline.git
+	branch = master
