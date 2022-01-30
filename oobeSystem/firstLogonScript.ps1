@@ -65,8 +65,8 @@ if (Test-Path -Path "$PSScriptRoot\Software\Chocolatey\chocolatey*nupkg") {
 # Start-Process -FilePath "$PSScriptRoot\Software\AcroRdrDC1901020064_MUI.exe" -ArgumentList "/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES" -Wait
 
 "Install o365"
-if (Test-Path -Path "$PSScriptRoot\Software\MSOffice\setup.exe") {
-  Start-Process -FilePath "$PSScriptRoot\Software\MSOffice\setup.exe" -ArgumentList "/configure `"$PSScriptRoot\Software\MSOffice\configuration.xml`"" -Wait
+if (Test-Path -Path "$PSScriptRoot\Software\MSOffice\odt\setup.exe") {
+  Start-Process -FilePath "$PSScriptRoot\Software\MSOffice\odt\setup.exe" -ArgumentList "/configure `"$PSScriptRoot\Software\MSOffice\configuration.xml`"" -Wait
 }
 # . "D:\Resources\O365_x64_CN\setup.exe" /configure "D:\Resources\O365_x64_CN\configuration.xml"
 
