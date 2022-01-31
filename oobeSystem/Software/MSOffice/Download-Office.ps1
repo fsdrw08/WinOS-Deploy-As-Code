@@ -9,10 +9,10 @@ $odtexe = Get-ChildItem $workingPath | Where-Object -FilterScript {$_.Name -like
 
 Start-Sleep -Seconds 3
 # extra the deployment tool
-. "$workingPath\$odtexe" /quiet /extract:$workingPath\odt\
+. "$workingPath\$odtexe" /quiet /extract:$workingPath\
 
 # https://docs.microsoft.com/en-us/DeployOffice/overview-office-deployment-tool#get-started-with-the-office-deployment-tool
 Start-Sleep -Seconds 3
 Set-Location $workingPath
-. .\odt\setup.exe /download $workingPath\Configuration.xml
-# . .\odt\setup.exe /configure $workingPath\Configuration.xml
+. .\setup.exe /download $workingPath\Configuration.xml
+# . .\setup.exe /configure $workingPath\Configuration.xml
