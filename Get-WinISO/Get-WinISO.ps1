@@ -1,11 +1,10 @@
 [CmdletBinding()]
 param (
-    # [Parameter(Mandatory = $true)]
-    # [ValidateNotNullOrEmpty()]
-    # [ValidateSet('10','11')]
-    # [int16]
-    # $WindowsVersion = "10",
-    # [Parameter(Mandatory = $true)]
+    [Parameter()]
+    [ValidateSet('10','11')]
+    [int16]
+    $WindowsVersion = "10",
+    [Parameter()]
     [string]
     $Language="English"
 )
@@ -51,20 +50,17 @@ begin {
 
     $edgeDriverOptions.AddArguments("--user-agent=Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25")
 
-    # switch ($WindowsVersion) {
-    #     "11" {
-    #         $url = "https://www.microsoft.com/en-us/software-download/windows11"
-    #       }
-    #     "10" {
-    #         $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
-    #       }
-    #     Default {
-    #         $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
-    #     }
-    # }
-
-    $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
-
+    switch ($WindowsVersion) {
+        "11" {
+            $url = "https://www.microsoft.com/en-us/software-download/windows11"
+          }
+        "10" {
+            $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
+          }
+        Default {
+            $url = "https://www.microsoft.com/en-us/software-download/windows10ISO"
+        }
+    }
 }
 
 process {
@@ -141,34 +137,88 @@ process {
 }
 
 end {
+    function Restart-Command {
+        [CmdletBinding()]
+        Param(
+            [Parameter(Position=0, Mandatory=$true)]
+            [scriptblock]$ScriptBlock,
     
-    $downloadLink
+            [Parameter(Position=1, Mandatory=$false)]
+            [int]$Maximum = 5,
     
-    $edgeDriver.Quit()
+            [Parameter(Position=2, Mandatory=$false)]
+            [int]$Delay = 500
+        )
     
-    $indexofFirstLetter = $downloadLink.Substring(0,$downloadLink.IndexOf("?")).LastIndexOf("/")+1
-    
-    $lengthOfFileName = $downloadLink.IndexOf("?")-$indexofFirstLetter
-    
-    $isoFileName = $downloadLink.Substring($indexofFirstLetter,$lengthOfFileName)
-    
-    $Title = "Get-WinISO"
-    $Info = "download the iso to $(Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName) in powershell now?"
-    $options = [System.Management.Automation.Host.ChoiceDescription[]] @("&Yes", "&No")
-    [int]$defaultchoice = 1
-    $opt = $host.UI.PromptForChoice($Title , $Info , $Options, $defaultchoice)
-    switch($opt) {
-        0 { 
-            Write-Host "download now" -ForegroundColor Yellow
-            # Start-BitsTransfer -Source $downloadLink -Destination (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName)
-            # Invoke-WebRequest -Uri $downloadLink -UseBasicParsing -OutFile (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName)
-            $WebClient = New-Object System.Net.WebClient
-            $WebClient.DownloadFile($downloadLink, (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName))
+        Begin {
+            $cnt = 0
         }
-        1 { 
-            Write-Host "Cancel" -ForegroundColor Green
+    
+        Process {
+            do {
+                $cnt++
+                try {
+                    $ScriptBlock.Invoke()
+                    return
+                } catch {
+                    Write-Error $_.Exception.InnerException.Message -ErrorAction Continue
+                    Start-Sleep -Milliseconds $Delay
+                }
+            } while ($cnt -lt $Maximum)
+    
+            # Throw an error after $Maximum unsuccessful invocations. Doesn't need
+            # a condition, since the function returns upon successful invocation.
+            throw 'Execution failed.'
         }
     }
+    function Start-WinISODownload {
+        [CmdletBinding()]
+        param (
+            [uri]$DownloadLink,
+            [string]$Path
+        )
+        
+        begin {
+            $indexofFirstLetter = $downloadLink.ToString().Substring(0,$downloadLink.ToString().IndexOf("?")).LastIndexOf("/")+1
+            $lengthOfFileName = $downloadLink.ToString().IndexOf("?")-$indexofFirstLetter
+            $isoFileName = $downloadLink.ToString().Substring($indexofFirstLetter,$lengthOfFileName)
+
+            $Title = "Get-WinISO"
+            $Info = "download the iso from $DownloadLink to $(Join-Path -Path $Path -ChildPath $isoFileName) in powershell now?"
+            $options = [System.Management.Automation.Host.ChoiceDescription[]] @("&Yes", "&No")
+            [int]$defaultchoice = 1
+            $opt = $host.UI.PromptForChoice($Title , $Info , $Options, $defaultchoice)
+        }
+        
+        process {
+            switch($opt) {
+                0 { 
+                    Write-Host "download now" -ForegroundColor Yellow
+                    Restart-Command -ScriptBlock {
+                        $WebClient = New-Object System.Net.WebClient
+                        $WebClient.DownloadFile($downloadLink, (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName))
+                    }
+                }
+                1 { 
+                    Write-Host "Cancel" -ForegroundColor Green
+                }
+            }
+        }
+        
+        end {
+            
+        }
+    }
+
+    $downloadLink = "https://software-download.microsoft.com/sg/Win10_21H2_English_x64.iso?t=cf02f1f8-914a-412a-be81-06926d23bff2&e=1644766489&h=504de70eaa17a7c1574d15da6b1bd6bf"
+
+    $edgeDriver.Quit()
+    
+    Start-WinISODownload -DownloadLink $downloadLink -Path (Split-Path (Split-Path $workingPath))
+    
+    # https://stackoverflow.com/questions/45470999/powershell-try-catch-and-retry
+
+    
     Pause
     
 }

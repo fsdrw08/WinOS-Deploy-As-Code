@@ -44,14 +44,14 @@ begin {
         {
         0 { Write-Host "Override webdriver.dll" -ForegroundColor Yellow
             # Get-MSEdgeDriver -Destination $Destination
-            $overrideWebDriver = $true
+            $overrideSeWebDriver = $true
         }
         1 { Write-Host "Quit" -ForegroundColor Green
-            $overrideWebDriver = $false
+            $overrideSeWebDriver = $false
         }
         }
     } else {
-        $overrideWebDriver = $true
+        $overrideSeWebDriver = $true
     }
     
 }
@@ -99,7 +99,7 @@ process {
     
     }
     
-    function Get-WebDriver {
+    function Get-SeWebDriver {
         param (
             [Parameter()]
             [string]$Destination
@@ -153,8 +153,8 @@ process {
         Get-MSEdgeDriver -Destination $Destination
     }
     
-    if ($overrideWebDriver) {
-        Get-WebDriver -Destination $Destination
+    if ($overrideSeWebDriver) {
+        Get-SeWebDriver -Destination $Destination
     }
     
 }

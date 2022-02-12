@@ -1,6 +1,6 @@
 rem ref: https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions
 rem ref: https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-deployment-sample-scripts-sxs#-createpartitions-uefitxt
-rem == CreatePartitions-UEFI.txt ==
+rem == Initialize-UEFIPartitions.txt ==
 rem == These commands are used with DiskPart to
 rem    create four partitions
 rem    for a UEFI/GPT-based PC.

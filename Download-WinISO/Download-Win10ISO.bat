@@ -1,1 +1,0 @@
-powershell -ExecutionPolicy bypass -File "%~dp0\Download-Win10ISO.ps1"

@@ -14,7 +14,7 @@ IF '%choice%'=='N' GOTO :choice2
 @REM IF %ERRORLEVEL% ==2 GOTO OPTION-2
 
 :choice1
-diskpart.exe /s %~dp0CreatePartitions-UEFI.txt
+diskpart.exe /s %~dp0Initialize-UEFIPartitions.txt
 setup.exe /unattend:%~dp0unattend.xml
 :choice2
 EXIT
