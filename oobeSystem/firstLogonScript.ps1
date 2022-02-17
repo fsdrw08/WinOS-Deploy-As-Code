@@ -43,10 +43,23 @@ Set-LocalUserPassword
 ipconfig /registerdns
 
 "# install language package"
-if (-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*zh-cn*"}) -and `
-    (Test-Path "$PSScriptRoot\Langpacks\Microsoft-Windows-Client-Language-Pack_x64_zh-cn_20h2.cab")) {
-  Add-WindowsPackage -Online -PackagePath "$PSScriptRoot\Langpacks\Microsoft-Windows-Client-Language-Pack_x64_zh-cn.cab"
+$Windows11 = [System.Environment]::OSVersion.Version.Build -ge "22000"
+switch ($Windows11) {
+  "True" {
+      $LangpackPath = "$PSScriptRoot\Langpacks\Win11"
+    }
+  "False" {
+      $LangpackPath = "$PSScriptRoot\Langpacks\Win10"
+    }
 }
+$LangLabel = "zh-CN"
+if ((-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*$LangLabel*"})) -and `
+    (Test-Path (Join-Path -Path $LangpackPath -ChildPath "Microsoft-Windows-Client-Language-Pack*"))) {
+  Add-WindowsPackage -Online -PackagePath "$PSScriptRoot\Langpacks\Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab"
+}
+
+"# change system region"
+Set-WinSystemLocale -SystemLocale $LangLabel
 
 "Install Chocolatey"
 if (Test-Path -Path "$PSScriptRoot\Software\Chocolatey\chocolatey*nupkg") {
@@ -82,9 +95,6 @@ if (Test-Path -Path "$PSScriptRoot\Software\MSOffice\odt\setup.exe") {
 
 # "Install Sogo"
 # . "$PSScriptRoot\Software\SOGO\sogou_yisheng_11a.exe" /S
-
-"# change system region"
-Set-WinSystemLocale -SystemLocale zh-CN
 
 "# use unicode UFT-8 for system worldwide language support, 
 ref: https://stackoverflow.com/questions/56419639/what-does-beta-use-unicode-utf-8-for-worldwide-language-support-actually-do"

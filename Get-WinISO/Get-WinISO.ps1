@@ -210,7 +210,7 @@ end {
         }
     }
 
-    $downloadLink = "https://software-download.microsoft.com/sg/Win10_21H2_English_x64.iso?t=cf02f1f8-914a-412a-be81-06926d23bff2&e=1644766489&h=504de70eaa17a7c1574d15da6b1bd6bf"
+    $downloadLink
 
     $edgeDriver.Quit()
     
