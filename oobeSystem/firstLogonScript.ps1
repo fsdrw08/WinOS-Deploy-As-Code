@@ -42,44 +42,47 @@ Set-LocalUserPassword
 "ipconfig"
 ipconfig /registerdns
 
+$WorkingPath = $PSScriptRoot
+# $WorkingPath = "D:\WinOS-Deploy-As-Code\oobeSystem"
+
 "# install language package"
 $Windows11 = [System.Environment]::OSVersion.Version.Build -ge "22000"
 switch ($Windows11) {
-  "True" {
-      $LangpackPath = "$PSScriptRoot\Langpacks\Win11"
+  "$True" {
+      $LangpackPath = "$WorkingPath\Langpacks\Win11"
     }
-  "False" {
-      $LangpackPath = "$PSScriptRoot\Langpacks\Win10"
+  "$False" {
+      $LangpackPath = "$WorkingPath\Langpacks\Win10"
     }
 }
 $LangLabel = "zh-CN"
 if ((-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*$LangLabel*"})) -and `
     (Test-Path (Join-Path -Path $LangpackPath -ChildPath "Microsoft-Windows-Client-Language-Pack*"))) {
-  Add-WindowsPackage -Online -PackagePath "$PSScriptRoot\Langpacks\Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab"
+  Add-WindowsPackage -Online -PackagePath "$LangpackPath\Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab"
 }
 
 "# change system region"
 Set-WinSystemLocale -SystemLocale $LangLabel
 
 "Install Chocolatey"
-if (Test-Path -Path "$PSScriptRoot\Software\Chocolatey\chocolatey*nupkg") {
-  & $PSScriptRoot\Software\Chocolatey\ChocolateyInstall.ps1
+if (Test-Path -Path "$WorkingPath\Software\Chocolatey\chocolatey*nupkg") {
+  & $WorkingPath\Software\Chocolatey\ChocolateyInstall.ps1
 }
 
 "Config WinRM"
-& $PSScriptRoot\Config\ConfigureRemotingForAnsible.ps1
+& $WorkingPath\Config\ConfigureRemotingForAnsible.ps1
 
 # "# Install 7zip"
-# choco install 7zip.install --source="$PSScriptRoot\Software\Chocolatey\" -y
+# choco install 7zip.install --source="$WorkingPath\Software\Chocolatey\" -y
 #. MSIEXEC.EXE /i "D:\Install\7z1900-x64.msi" /qn /wait
 
 # "#5. Install AdobeDC"
-# Start-Process -FilePath msiexec -ArgumentList "/i `"$PSScriptRoot\Software\ReaderDC\AcroRead.msi`" TRANSFORMS=`"D:\Install\ReaderDC\AcroRead.mst`" /qn" -Wait
-# Start-Process -FilePath "$PSScriptRoot\Software\AcroRdrDC1901020064_MUI.exe" -ArgumentList "/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES" -Wait
+# Start-Process -FilePath msiexec -ArgumentList "/i `"$WorkingPath\Software\ReaderDC\AcroRead.msi`" TRANSFORMS=`"D:\Install\ReaderDC\AcroRead.mst`" /qn" -Wait
+# Start-Process -FilePath "$WorkingPath\Software\AcroRdrDC1901020064_MUI.exe" -ArgumentList "/sAll /rs /rps /msi /norestart /quiet EULA_ACCEPT=YES" -Wait
 
 "Install o365"
-if (Test-Path -Path "$PSScriptRoot\Software\MSOffice\odt\setup.exe") {
-  Start-Process -FilePath "$PSScriptRoot\Software\MSOffice\odt\setup.exe" -ArgumentList "/configure `"$PSScriptRoot\Software\MSOffice\configuration.xml`"" -Wait
+if (Test-Path -Path "$WorkingPath\Software\MSOffice\setup.exe") {
+  Start-Process -FilePath "$WorkingPath\Software\MSOffice\setup.exe" -ArgumentList "/configure `"$WorkingPath\Software\MSOffice\configuration.xml`"" -Wait
 }
 # . "D:\Resources\O365_x64_CN\setup.exe" /configure "D:\Resources\O365_x64_CN\configuration.xml"
 
@@ -87,14 +90,14 @@ if (Test-Path -Path "$PSScriptRoot\Software\MSOffice\odt\setup.exe") {
 # Start-Process -FilePath msiexec -ArgumentList "/i `"D:\Resources\Teams_windows_x64.msi`" ALLUSERS=1 /quiet" -Wait
 
 # "Install Citrix Workspace"
-# . "$PSScriptRoot\Software\Citrix\CitrixWorkspaceApp.exe" /silent
-# Start-Process -FilePath "$PSScriptRoot\Software\Citrix\CitrixWorkspaceApp.exe" -ArgumentList  "/silent"
+# . "$WorkingPath\Software\Citrix\CitrixWorkspaceApp.exe" /silent
+# Start-Process -FilePath "$WorkingPath\Software\Citrix\CitrixWorkspaceApp.exe" -ArgumentList  "/silent"
 
 # "Install EPSON Iprojection"
-# Start-Process -FilePath msiexec -ArgumentList "/i `"$PSScriptRoot\Software\EPSON\Epson iProjection Ver.3.00.msi`" /quiet" -Wait
+# Start-Process -FilePath msiexec -ArgumentList "/i `"$WorkingPath\Software\EPSON\Epson iProjection Ver.3.00.msi`" /quiet" -Wait
 
 # "Install Sogo"
-# . "$PSScriptRoot\Software\SOGO\sogou_yisheng_11a.exe" /S
+# . "$WorkingPath\Software\SOGO\sogou_yisheng_11a.exe" /S
 
 "# use unicode UFT-8 for system worldwide language support, 
 ref: https://stackoverflow.com/questions/56419639/what-does-beta-use-unicode-utf-8-for-worldwide-language-support-actually-do"
