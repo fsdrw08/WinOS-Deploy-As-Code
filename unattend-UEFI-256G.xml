@@ -32,6 +32,9 @@
                             <Order>3</Order>
                             <Size>240646</Size>
                         </CreatePartition>
+                        <!-- ref: https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions?view=windows-11#recovery-tools-partition 
+                        We recommend that you place this partition immediately after the Windows partition. 
+                        This allows Windows to modify and recreate the partition later if future updates require a larger recovery image.-->
                         <CreatePartition wcm:action="add">
                             <Type>Primary</Type>
                             <Order>4</Order>
