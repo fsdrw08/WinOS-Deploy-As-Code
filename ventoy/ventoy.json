@@ -1,0 +1,11 @@
+{
+    "control":[
+        { "VTOY_DEFAULT_SEARCH_ROOT": "/ISO" }
+    ],
+    "injection":[
+        {
+            "image": "/ISO/Win**.iso",
+            "archive": "/WinOS-Deploy-As-Code/windows_injection.7z"
+        }
+    ]
+}
