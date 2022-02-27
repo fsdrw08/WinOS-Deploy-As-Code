@@ -129,14 +129,14 @@
                 <Username>root</Username>
             </AutoLogon>
             <FirstLogonCommands>
-                <SynchronousCommand wcm:action="add">
+                <!-- <SynchronousCommand wcm:action="add">
                     <CommandLine>Powershell -executionpolicy Bypass &quot;Read-Host &apos;Confirm&apos;&quot;</CommandLine>
                     <Description>run powershell for comfirm</Description>
                     <Order>1</Order>
-                </SynchronousCommand>
+                </SynchronousCommand> -->
                 <SynchronousCommand wcm:action="add">
                     <CommandLine>Powershell -executionpolicy Bypass -File &quot;D:\WinOS-Deploy-As-Code\oobeSystem\firstLogonScript.ps1&quot;</CommandLine>
-                    <Order>2</Order>
+                    <Order>1</Order>
                     <RequiresUserInput>true</RequiresUserInput>
                     <Description>run powershell</Description>
                 </SynchronousCommand>

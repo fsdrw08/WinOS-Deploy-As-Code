@@ -1,7 +1,10 @@
 #
 "Rename Computer"
-Rename-Computer -newname (Read-Host "PC new name")
-
+# Rename-Computer -newname (Read-Host "PC new name")
+$brand = Get-WmiObject win32_bios | Select-Object -ExpandProperty Manufacturer
+$sn = Get-WmiObject win32_bios | Select-Object -ExpandProperty SerialNumber
+Rename-Computer -newname "$brand-$sn"
+"Computer renamed to `"$brand-$sn`""
 
 # "Join Domain"
 # Add-Computer -domainname  -cred (get-credential domain\ServiceAccount) -Options JoinWithNewName -passthru -verbose
@@ -9,35 +12,71 @@ Rename-Computer -newname (Read-Host "PC new name")
 "set current user password
 ref: https://codeandkeep.com/Powershell-Read-Password/"
 
-function Set-LocalUserPassword {
-  $pass=Read-Host -Prompt 'Enter a Password' `
-    -AsSecureString 
-  $pass2=Read-Host -Prompt 'Re-type Password' `
-    -AsSecureString 
-  $bstr=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass)
-  $plain=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
-  [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
-  $bstr2=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass2)
-  $plain2=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr2)
-  [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr2)
-  [bool]$pValid=$true
-  $builder=New-Object -TypeName Text.StringBuilder
-  if ($plain -cne $plain2){
-    $pValid=$false
-    [void]$builder.Append('Passwords do not match, input again ')
-  }
-  if ($plain.Length -lt 1){
-      $pValid=$false
-      [void]$builder.Append('You input nothing. ')
-    }
-  if($pValid -eq $false){
-      Write-Warning -Message $builder.ToString()
-      Set-LocalUserPassword
-  }else{
-      Get-LocalUser $env:USERNAME | Set-LocalUser -Password $pass
+# function Set-LocalUserPassword {
+#   $pass=Read-Host -Prompt 'Enter a Password' `
+#     -AsSecureString 
+#   $pass2=Read-Host -Prompt 'Re-type Password' `
+#     -AsSecureString 
+#   $bstr=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass)
+#   $plain=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
+#   [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+#   $bstr2=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass2)
+#   $plain2=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr2)
+#   [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr2)
+#   [bool]$pValid=$true
+#   $builder=New-Object -TypeName Text.StringBuilder
+#   if ($plain -cne $plain2){
+#     $pValid=$false
+#     [void]$builder.Append('Passwords do not match, input again ')
+#   }
+#   if ($plain.Length -lt 1){
+#       $pValid=$false
+#       [void]$builder.Append('You input nothing. ')
+#     }
+#   if($pValid -eq $false){
+#       Write-Warning -Message $builder.ToString()
+#       Set-LocalUserPassword
+#   }else{
+#       Get-LocalUser $env:USERNAME | Set-LocalUser -Password $pass
+#   }
+# }
+# Set-LocalUserPassword
+
+function Set-CurrentUserPassword {
+  param (
+    [SecureString]$Password
+  )
+    if (!$Password -or $Password.Length -lt 1) {
+      $pass=Read-Host -Prompt 'Enter a Password' -AsSecureString 
+      $pass2=Read-Host -Prompt 'Re-type Password' -AsSecureString 
+      $bstr=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass)
+      $plain=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr)
+      [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr)
+      $bstr2=[Runtime.InteropServices.Marshal]::SecureStringToBSTR($pass2)
+      $plain2=[Runtime.InteropServices.Marshal]::PtrToStringAuto($bstr2)
+      [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($bstr2)
+      [bool]$pValid=$true
+      $builder=New-Object -TypeName Text.StringBuilder
+      if ($plain -cne $plain2){
+        $pValid=$false
+        [void]$builder.Append('Passwords do not match, input again ')
+      }
+      if ($plain.Length -lt 1){
+          $pValid=$false
+          [void]$builder.Append('You input nothing. ')
+        }
+      if($pValid -eq $false){
+          Write-Warning -Message $builder.ToString()
+          Set-LocalUserPassword
+      }else{
+          Get-LocalUser $env:USERNAME | Set-LocalUser -Password $pass
+      }
+  } else {
+    Get-LocalUser $env:USERNAME | Set-LocalUser -Password $Password -WhatIf
   }
 }
-Set-LocalUserPassword
+
+Set-CurrentUserPassword -Password (ConvertTo-SecureString "root" -AsPlainText -Force)
 
 "ipconfig"
 ipconfig /registerdns
@@ -122,6 +161,10 @@ powercfg -change -standby-timeout-ac 300
 "set PC turn off screen after 5 hours
 ref: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options"
 powercfg -change monitor-timeout-ac 30
+
+"# enable remote desktop"
+Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-name "fDenyTSConnections" -Value 0
+Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
 "# enable Hyper-V"
 Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
