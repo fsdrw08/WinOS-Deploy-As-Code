@@ -2,10 +2,13 @@
     "control":[
         { "VTOY_DEFAULT_SEARCH_ROOT": "/ISO" }
     ],
-    "injection":[
+    "auto_install":[
         {
-            "image": "/ISO/Win**.iso",
-            "archive": "/WinOS-Deploy-As-Code/windows_injection.7z"
+            "parent": "/ISO/Windows",
+            "template":[
+                "/WinOS-Deploy-As-Code/unattendXML/unattend-UEFI-256G.xml",
+                "/WinOS-Deploy-As-Code/unattendXML/unattend-UEFI-512G.xml"
+            ]
         }
     ]
 }
