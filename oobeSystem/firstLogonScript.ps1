@@ -3,8 +3,13 @@
 # Rename-Computer -newname (Read-Host "PC new name")
 $brand = Get-WmiObject win32_bios | Select-Object -ExpandProperty Manufacturer
 $sn = Get-WmiObject win32_bios | Select-Object -ExpandProperty SerialNumber
-Rename-Computer -newname "$brand-$sn"
-"Computer renamed to `"$brand-$sn`""
+if (("$brand-$sn".Length -le 15)) {
+  Rename-Computer -newname "$brand-$sn"
+  "Computer renamed to `"$brand-$sn`""
+} else {
+  "`$brand-`$sn too long, skip rename computer"
+}
+Start-Sleep -Seconds 3
 
 # "Join Domain"
 # Add-Computer -domainname  -cred (get-credential domain\ServiceAccount) -Options JoinWithNewName -passthru -verbose
@@ -72,11 +77,12 @@ function Set-CurrentUserPassword {
           Get-LocalUser $env:USERNAME | Set-LocalUser -Password $pass
       }
   } else {
-    Get-LocalUser $env:USERNAME | Set-LocalUser -Password $Password -WhatIf
+    Get-LocalUser $env:USERNAME | Set-LocalUser -Password $Password
   }
 }
 
 Set-CurrentUserPassword -Password (ConvertTo-SecureString "root" -AsPlainText -Force)
+Start-Sleep -Seconds 3
 
 "ipconfig"
 ipconfig /registerdns
@@ -167,4 +173,13 @@ Set-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server'-
 Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
 "# enable Hyper-V"
-Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+# Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Hyper-V -All
+# https://mikefrobbins.com/2018/06/21/use-powershell-to-install-windows-features-and-reboot/
+$ProgPref = $ProgressPreference
+$ProgressPreference = 'SilentlyContinue'
+$results = Enable-WindowsOptionalFeature -FeatureName Microsoft-Hyper-V -Online -All -NoRestart -WarningAction SilentlyContinue
+$ProgressPreference = $ProgPref
+if ($results.RestartNeeded -eq $true) {
+  Start-Sleep -Seconds 5
+  Restart-Computer -Force
+}
