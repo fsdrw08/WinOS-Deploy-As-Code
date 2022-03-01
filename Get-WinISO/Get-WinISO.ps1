@@ -48,6 +48,8 @@ begin {
 
     $edgeDriverOptions = New-Object OpenQA.Selenium.Edge.EdgeOptions
 
+    # ref Directly Download Latest Windows 10 WIM-BASE ISO from Microsoft
+    # https://www.tenforums.com/tutorials/9230-download-windows-10-iso-file.html#option3
     $edgeDriverOptions.AddArguments("--user-agent=Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25")
 
     switch ($WindowsVersion) {

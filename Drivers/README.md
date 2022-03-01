@@ -1,4 +1,4 @@
-## Put driver here
+## Put driver in this folder
 
 DELL Enterprise Client driver
 https://www.dell.com/support/kbdoc/en-us/000124139/dell-command-deploy-driver-packs-for-enterprise-client-os-deployment
@@ -10,5 +10,5 @@ Lenovo Microsoft System Center Configuration Manager (SCCM) and Microsoft Deploy
 https://support.lenovo.com/us/en/solutions/ht074984
 
 Intel NUC
-https://www.intel.com/content/www/us/en/search.html?ws=text#t=Downloads&sort=%40emtcontenttype_en%20ascending&layout=table&cf:Downloads=[%7B%22actualLabel%22%3A%22Intel%C2%AE%20NUC%22%2C%22displayLabel%22%3A%22Intel%C2%AE%20NUC%22%7D]
-
+https://www.intel.com/content/www/us/en/support/products/98414/intel-nuc.html#70407
+https://www.intel.com/content/www/us/en/support/articles/000021509/intel-nuc.html
