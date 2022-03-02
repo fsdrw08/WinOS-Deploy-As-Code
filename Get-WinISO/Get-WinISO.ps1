@@ -12,7 +12,7 @@ begin {
 
     # $workingPath = "D:\WinOS-Deploy-As-Code\Download-WinISO"
     $workingPath = $PSScriptRoot
-    $webDriverPath = $workingPath | Split-Path | Join-Path -ChildPath "WebDriver"
+    $webDriverPath = Split-Path -Path $workingPath  | Join-Path -ChildPath "WebDriver"
 
     if (!(Test-Path "$($webDriverPath)\WebDriver.dll") -or !(Test-Path "$webDriverPath\WebDriver.Support.dll")) {
     . $webDriverPath\Download-WebDriver.ps1
@@ -139,7 +139,8 @@ process {
 }
 
 end {
-    function Restart-Command {
+    # https://stackoverflow.com/questions/45470999/powershell-try-catch-and-retry
+    function Retry-Command {
         [CmdletBinding()]
         Param(
             [Parameter(Position=0, Mandatory=$true)]
@@ -181,9 +182,9 @@ end {
         )
         
         begin {
-            $indexofFirstLetter = $downloadLink.ToString().Substring(0,$downloadLink.ToString().IndexOf("?")).LastIndexOf("/")+1
-            $lengthOfFileName = $downloadLink.ToString().IndexOf("?")-$indexofFirstLetter
-            $isoFileName = $downloadLink.ToString().Substring($indexofFirstLetter,$lengthOfFileName)
+            $indexofFirstLetter = $DownloadLink.ToString().Substring(0,$DownloadLink.ToString().IndexOf("?")).LastIndexOf("/")+1
+            $lengthOfFileName = $DownloadLink.ToString().IndexOf("?")-$indexofFirstLetter
+            $isoFileName = $DownloadLink.ToString().Substring($indexofFirstLetter,$lengthOfFileName)
 
             $Title = "Get-WinISO"
             $Info = "download the iso from $DownloadLink to $(Join-Path -Path $Path -ChildPath $isoFileName) in powershell now?"
@@ -196,9 +197,9 @@ end {
             switch($opt) {
                 0 { 
                     Write-Host "download now" -ForegroundColor Yellow
-                    Restart-Command -ScriptBlock {
+                    Retry-Command -ScriptBlock {
                         $WebClient = New-Object System.Net.WebClient
-                        $WebClient.DownloadFile($downloadLink, (Join-Path (Split-Path (Split-Path $workingPath)) $isoFileName))
+                        $WebClient.DownloadFile($DownloadLink, (Join-Path -Path $Path -ChildPath $isoFileName))
                     }
                 }
                 1 { 
@@ -212,11 +213,15 @@ end {
         }
     }
 
-    $downloadLink
+    $DownloadLink
 
     $edgeDriver.Quit()
     
-    Start-WinISODownload -DownloadLink $downloadLink -Path (Split-Path (Split-Path $workingPath))
+    $ISOSaveTo = Split-Path -Path $workingPath -Qualifier | Join-Path -ChildPath "\ISO\Windows"
+    if (-not (Test-Path -Path $ISOSaveTo)) {
+        New-Item -Path $ISOSaveTo -ItemType Directory
+    }
+    Start-WinISODownload -DownloadLink $downloadLink -Path $ISOSaveTo
     
     # https://stackoverflow.com/questions/45470999/powershell-try-catch-and-retry
 
