@@ -164,7 +164,7 @@ reg add "HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon" /v AutoLogo
 ref: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options"
 powercfg -change -standby-timeout-ac 300
 
-"set PC turn off screen after 5 hours
+"set PC turn off screen after 30 mins
 ref: https://docs.microsoft.com/en-us/windows-hardware/design/device-experiences/powercfg-command-line-options"
 powercfg -change monitor-timeout-ac 30
 

@@ -1,4 +1,4 @@
 # $workingPath = "D:\WinOS-Deploy-As-Code\Copy-VentoyFiles"
 $workingPath = $PSScriptRoot
-$DriveRootPath = $workingPath.Substring(0,3)
-Copy-Item -Path $workingPath\ventoy -Destination $DriveRootPath -Recurse -Force -Verbose
+$DriveRootPath = Split-Path -Path $workingPath -Qualifier
+Copy-Item -Path $workingPath\ventoy -Destination $DriveRootPath'\' -Recurse -Force -Verbose
