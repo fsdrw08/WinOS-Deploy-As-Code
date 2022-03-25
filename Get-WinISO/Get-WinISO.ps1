@@ -6,7 +6,7 @@ param (
     $WindowsVersion = "10",
     [Parameter()]
     [string]
-    $Language="English"
+    $Language="English International"
 )
 begin {
 
@@ -15,7 +15,7 @@ begin {
     $webDriverPath = Split-Path -Path $workingPath  | Join-Path -ChildPath "WebDriver"
 
     if (!(Test-Path "$($webDriverPath)\WebDriver.dll") -or !(Test-Path "$webDriverPath\WebDriver.Support.dll")) {
-    . $webDriverPath\Get-WebDriver.ps1
+    . $webDriverPath\Get-WebDriver.ps1 -Destination $webDriverPath
     }
 
     Add-Type -Path "$webDriverPath\WebDriver.dll"
