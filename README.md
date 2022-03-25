@@ -36,7 +36,8 @@ Everything in one code base to automatically deploy windows (10+) to a bare meta
    
 # Get started:
 Prerequest: portable usb drive (at least 8G+, 32G is recommanded) with no data keep.  
-1. Install ventoy by scoop 
+1. Plugin the portable usb drive
+2. Install ventoy by scoop 
    ```
    scoop install ventoy
    ```
@@ -44,23 +45,24 @@ Prerequest: portable usb drive (at least 8G+, 32G is recommanded) with no data k
    ```
    choco install ventoy -y
    ```
-   or manually download and install from https://www.ventoy.net/en/download.html
-2. Plugin the portable usb drive, launch ventoy2disk, partition and install ventoy to the the usb drive. BE CAREFUL! This step will delete ALL files in your usb drive.  
-3. Clone this repo into root folder of the usb drive.
+   or  
+   manually download and install from https://www.ventoy.net/en/download.html
+3. Launch ventoy2disk, partition and install ventoy to the the usb drive. BE CAREFUL! This step will delete ALL files in your usb drive.  
+4. Clone this repo into root folder of the usb drive.
    ```
    git clone --recurse-submodules https://github.com/fsdrw08/WinOS-Deploy-As-Code.git
    ```  
-4. Run script [.\Get-WinISO\Get-Win11ISO.bat](Get-WinISO/Get-Win11ISO.bat) to download the Windows 11 ISO to `<usb drive label>:\ISO\Windows`, you can also download Windows 10 ISO by running [.\Get-WinISO\Get-Win10ISO.bat](Get-WinISO/Get-Win10ISO.bat)
-5.  According to the machine disk size, verify the disk partition config in .\unattendXML\unattend-UEFI-*G.xml, if there is no disk size match to you, create a new one by youself, then update [.\Copy-VentoyFiles\ventoy\ventoy.json](Copy-VentoyFiles/ventoy/ventoy.json) to add your new unattend xml file in template path.
-6. Run script [.\Copy-VentoyFiles\Copy-VentoyFiles.bat](Copy-VentoyFiles/Copy-VentoyFiles.bat) to copy ventoy configuration json file to the usb drive root folder
-7. (Optional), for PC driver deployment during offlineServicing pass, reference [.\Drivers\README.md](Drivers/README.md), prepare drivers for the target machine you need to install 
-8. (Optional), for language pack offline deployment, reference [.\oobeSystem\Langpacks\README.md](oobeSystem/Langpacks/README.md), download language package ISO and extra the target language cab file to related folder
-9. (Optional), for chocolatey offline deployment, run script  
+5. Run script [.\Get-WinISO\Get-Win11ISO.bat](Get-WinISO/Get-Win11ISO.bat) to download the Windows 11 ISO to `<usb drive label>:\ISO\Windows`, you can also download Windows 10 ISO by running [.\Get-WinISO\Get-Win10ISO.bat](Get-WinISO/Get-Win10ISO.bat)
+6.  According to the machine disk size, verify the disk partition config in .\unattendXML\unattend-UEFI-*G.xml, if there is no disk size match to you, create a new one by youself, then update [.\Copy-VentoyFiles\ventoy\ventoy.json](Copy-VentoyFiles/ventoy/ventoy.json) to add your new unattend xml file in template path.
+7. Run script [.\Copy-VentoyFiles\Copy-VentoyFiles.bat](Copy-VentoyFiles/Copy-VentoyFiles.bat) to copy ventoy configuration json file to the usb drive root folder
+8. (Optional), for PC driver deployment during offlineServicing pass, reference [.\Drivers\README.md](Drivers/README.md), prepare drivers for the target machine you need to install 
+9. (Optional), for language pack offline deployment, reference [.\oobeSystem\Langpacks\README.md](oobeSystem/Langpacks/README.md), download language package ISO and extra the target language cab file to related folder
+10. (Optional), for chocolatey offline deployment, run script  
 (local)[.\oobeSystem\Software\Chocolatey\Get-ChocoPackages.bat](oobeSystem/Software/Chocolatey/Get-ChocoPackages.bat) or  
 (web)[.\oobeSystem\Software\Chocolatey\Get-ChocoPackages.bat](https://github.com/fsdrw08/Install-ChocoOffline/blob/main/Get-ChocoPackages.bat) to download chocolatey nupkg installation file
-10. (Optional), for MS office offline deployment, run script [.\oobeSystem\Software\MSOffice\Download-Office.bat](oobeSystem/Software/MSOffice/Download-Office.bat) to download office installation files
-11. Prepare done, plug in this USB drive to the target machine, boot from this USB drive, then Ventoy get load
-12. Select the related Windows ISO, and related unattend xml file according to the disk size, then the installation process will start.
+11. (Optional), for MS office offline deployment, run script [.\oobeSystem\Software\MSOffice\Download-Office.bat](oobeSystem/Software/MSOffice/Download-Office.bat) to download office installation files
+12. Prepare done, plug in this USB drive to the target machine, boot from this USB drive, then Ventoy get load
+13. Select the related Windows ISO, and related unattend xml file according to the disk size, then the installation process will start.
 
 
 # Components reference in this project:
