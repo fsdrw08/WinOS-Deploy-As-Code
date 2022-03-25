@@ -54,8 +54,10 @@ Prerequest: portable usb drive (at least 8G+, 32G is recommanded) with no data k
 5.  According to the machine disk size, verify the disk partition config in .\unattendXML\unattend-UEFI-*G.xml, if there is no disk size match to you, create a new one by youself, then update [.\Copy-VentoyFiles\ventoy\ventoy.json](Copy-VentoyFiles/ventoy/ventoy.json) to add your new unattend xml file in template path.
 6. Run script [.\Copy-VentoyFiles\Copy-VentoyFiles.bat](Copy-VentoyFiles/Copy-VentoyFiles.bat) to copy ventoy configuration json file to the usb drive root folder
 7. (Optional), for PC driver deployment during offlineServicing pass, reference [.\Drivers\README.md](Drivers/README.md), prepare drivers for the target machine you need to install 
-8. (Optional), for language pack offline deployment, reference [.\oobeSystem\Langpacks\README.md](oobesystem/Langpacks/README.md), download language package ISO and extra the target language cab file to related folder
-9. (Optional), for chocolatey offline deployment, run script [.\oobeSystem\Software\Chocolatey\Get-ChocoPackages.bat](oobeSystem/Software/Chocolatey/Get-ChocoPackages.bat) to download chocolatey nupkg installation file
+8. (Optional), for language pack offline deployment, reference [.\oobeSystem\Langpacks\README.md](oobeSystem/Langpacks/README.md), download language package ISO and extra the target language cab file to related folder
+9. (Optional), for chocolatey offline deployment, run script  
+(local)[.\oobeSystem\Software\Chocolatey\Get-ChocoPackages.bat](oobeSystem/Software/Chocolatey/Get-ChocoPackages.bat) or  
+(web)[.\oobeSystem\Software\Chocolatey\Get-ChocoPackages.bat](https://github.com/fsdrw08/Install-ChocoOffline/blob/main/Get-ChocoPackages.bat) to download chocolatey nupkg installation file
 10. (Optional), for MS office offline deployment, run script [.\oobeSystem\Software\MSOffice\Download-Office.bat](oobeSystem/Software/MSOffice/Download-Office.bat) to download office installation files
 11. Prepare done, plug in this USB drive to the target machine, boot from this USB drive, then Ventoy get load
 12. Select the related Windows ISO, and related unattend xml file according to the disk size, then the installation process will start.
