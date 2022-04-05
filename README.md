@@ -4,7 +4,7 @@ Everything in one code base to automatically deploy windows (10+) to a bare meta
 # The whole installation procedure:
 1. PC boot from ventoy partitioned disk (effect by [Ventoy2Disk](#3-ventoy2disk));
 2. Under ventoy UI, select ISO file to launch, then select unattend xml file for auto install process (effect by [Download ISO](#5-download-iso), [Unattended XML](#6-unattended-xml) and  [Ventoy config](#7-ventoy-config));
-3. According the config in unattend install file:
+3. According the config in unattend xml file, e.g. [./unattendXML/unattend-UEFI-256G.xml](./unattendXML/unattend-UEFI-256G.xml):
    1. windowsPE pass: 
       - Config winpe env language
       - Re-partition disk, install Windows system to target partition;
@@ -50,7 +50,7 @@ Prerequest: portable usb drive (at least 8G+, 32G is recommanded) with no data k
    or manually download and install from 
    https://www.ventoy.net/en/download.tml
    #### 3. Ventoy2Disk
-   Launch Ventoy2Disk, partition and install ventoy to the the usb drive. BE CAREFUL! This step will delete ALL files in your usb drive.]  
+   Launch Ventoy2Disk, partition and install ventoy to the the usb drive. BE CAREFUL! This step will delete ALL files in your usb drive.  
    #### 4. Clone repo
    this repo into root folder of the usb drive.
    ```
@@ -74,8 +74,8 @@ or
 to download chocolatey nupkg installation file
    ### 11. (Optional) MS office
    For MS office offline deployment, run script [.\oobeSystem\Software\MSOffice\Download-Office.bat](oobeSystem/Software/MSOffice/Download-Office.bat) to download office installation files
-12. Prepare done, plug in this USB drive to the target machine, boot from this USB drive, then Ventoy get load
-13. Select the related Windows ISO, and related unattend xml file according to the disk size, then the installation process will start.
+   ### 12. Prepare done
+   Plug in this USB drive to the target machine, boot from this USB drive, then Ventoy get load, select the related Windows ISO, and related unattend xml file according to the disk size, then the installation process will start.
 
 
 # Components reference in this project:
