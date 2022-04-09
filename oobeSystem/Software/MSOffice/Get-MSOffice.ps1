@@ -2,7 +2,7 @@
 $workingPath = $PSScriptRoot
 
 if (!(Test-Path "$workingPath\officedeploymenttool*.exe")) {
-    . $workingPath\Download-ODT.ps1
+    . $workingPath\Get-MSODT.ps1
 }
 
 $odtexe = Get-ChildItem $workingPath | Where-Object -FilterScript {$_.Name -like 'officedeploymenttool*.exe'} | Select-Object -ExpandProperty Name

@@ -55,26 +55,210 @@ Prerequest: portable usb drive (at least 8G+, 32G is recommanded) with no data k
    this repo into root folder of the usb drive.
    ```
    git clone --recurse-submodules https://github.com/fsdrw08/WinOS-Deploy-As-Code.git
-   ```  
+   ```
+   After this step, you got this
+   ```
+   E:\
+   +--WinOS-Deploy-As-Code  ⬅️ you got these in step 4
+      \...
+   ```
    #### 5. Download ISO
-   Run script [.\Get-WinISO\Get-Win11ISO.bat](Get-WinISO/Get-Win11ISO.bat) to download the Windows 11 ISO to `<usb drive label>:\ISO\Windows`, you can also download Windows 10 ISO by running [.\Get-WinISO\Get-Win10ISO.bat](Get-WinISO/Get-Win10ISO.bat). These script will download and use selenium for automate the ISO download process.
+   Run script [.\Get-WinISO\Get-Win11ISO.bat](Get-WinISO/Get-Win11ISO.bat) to download the Windows 11 ISO to `<usb drive label>:\ISO\Windows`, you can also download Windows 10 ISO by running [.\Get-WinISO\Get-Win10ISO.bat](Get-WinISO/Get-Win10ISO.bat). These script will download and use selenium for automate the ISO download process.  
+   After this step, you got this
+   ```
+   E:\
+   +--WinOS-Deploy-As-Code
+   |  \...
+   \--ISO
+      \--Windows
+         \--Win11_EnglishInternational_x64v1.iso  ⬅️ you got this in step 5
+   ```
    #### 6. Unattended XML
-   According to the machine disk size, verify the disk partition config in [.\unattendXML](/unattendXML/)\unattend-UEFI-*G.xml, if there is no disk size match to you, create a new unattended xml by youself.
+   According to the machine disk size, verify the disk partition config in [.\unattendXML](/unattendXML/)\unattend-UEFI-*G.xml, if there is no disk size match to you, create a new unattended xml by youself.  
+   After this step, you got this (if you create new one)
+   ```
+   E:\
+   +--WinOS-Deploy-As-Code
+   |  +--unattendXML
+   |  |  +--unattend-UEFI-xxxG.xml  ⬅️ you got this in step 6
+   |  |  \...
+   |  \...
+   \--ISO
+      \--Windows
+         \--Win11_EnglishInternational_x64v1.iso
+   ```
    #### 7. Ventoy config
    Update [.\Copy-VentoyFiles\ventoy\ventoy.json](Copy-VentoyFiles/ventoy/ventoy.json) to add your new unattend xml file in template path (if you did in last step). Then run script [.\Copy-VentoyFiles\Copy-VentoyFiles.bat](Copy-VentoyFiles/Copy-VentoyFiles.bat) to copy ventoy configuration json file to the usb drive root folder.
+   After this step, you got this
+   ```
+   E:\
+   +--WinOS-Deploy-As-Code
+   |  +--unattendXML
+   |  |  +--unattend-UEFI-xxxG.xml
+   |  |  \...   
+   |  \--...
+   +--ISO
+   |  \--Windows
+   |     \--Win11_EnglishInternational_x64v1.iso
+   \--ventoy          ⬅️ you got these in step 7
+      \--ventoy.json  ⬅️
+   ```
    ### 8. (Optional) PC driver
    For PC driver deployment during offlineServicing pass, reference [.\Drivers\README.md](Drivers/README.md), prepare drivers for the target machine you need to install.
+   After this step, you got this
+   ```
+   E:\
+   +--WinOS-Deploy-As-Code
+   |  +--unattendXML
+   |  |  +--unattend-UEFI-xxxG.xml
+   |  |  \...      
+   |  +--Drivers
+   |  |  +--HP_WKS_Z2_G4_W10_x64_6.00.A.1  ⬅️ you got thess in step 8
+   |  |  |  \--...                         ⬅️
+   |  |  \...
+   |  \--...
+   +--ISO
+   |  \--Windows
+   |     \--Win11_EnglishInternational_x64v1.iso
+   \--ventoy
+      \--ventoy.json
+   ```
    ### 9. (Optional) Lang pack
-   For language pack offline deployment, reference [.\oobeSystem\Langpacks\README.md](oobeSystem/Langpacks/README.md), download language package ISO and extra the target language cab file to related folder.
+   For language pack offline deployment, reference [.\oobeSystem\Langpacks\README.md](oobeSystem/Langpacks/README.md), download language package ISO and extra the target language cab file to related folder.  
+   After this step, you got this
+   ```
+   E:\
+   +--WinOS-Deploy-As-Code  ← you got these in step 4
+   |  +--unattendXML
+   |  |  +--unattend-UEFI-xxxG.xml  ← you got this in step 6
+   |  |  \...      
+   |  +--Drivers
+   |  |  +--HP_WKS_Z2_G4_W10_x64_6.00.A.1  ←┐ you got thess in step 8
+   |  |  |  \--...                         ←┘
+   |  |  \...
+   |  +--oobeSystem
+   |  |  +--Langpacks
+   |  |  |  +--Win11
+   |  |  |  |  +--README.md
+   |  |  |  |  \--Microsoft-Windows-Client-Language-Pack_x64_zh-cn.cab  ⬅️ you got this in step 9
+   |  |  |  \--...
+   |  |  \--...
+   |  \--...
+   +--ISO
+   |  \--Windows
+   |     \--Win11_EnglishInternational_x64v1.iso
+   \--ventoy
+      \--ventoy.json
+   ```
    ### 10. (Optional) Chocolatey
    For chocolatey offline deployment, run script  
-(local)[.\oobeSystem\Software\Chocolatey\Get-ChocoPackages.bat](oobeSystem/Software/Chocolatey/Get-ChocoPackages.bat)  
-or  
-(web)[.\oobeSystem\Software\Chocolatey\Get-ChocoPackages.bat](https://github.com/fsdrw08/Install-ChocoOffline/blob/main/Get-ChocoPackages.bat)  
-to download chocolatey nupkg installation file
+   (local)[.\oobeSystem\Software\Chocolatey\Get-ChocoPackages.bat](oobeSystem/Software/Chocolatey/Get-ChocoPackages.bat)  
+   or  
+   (web)[.\oobeSystem\Software\Chocolatey\Get-ChocoPackages.bat](https://github.com/fsdrw08/Install-ChocoOffline/blob/main/Get-ChocoPackages.bat)  
+   to download chocolatey nupkg installation file.
+   After this step, you got this.
+   ```
+   E:\
+   +--WinOS-Deploy-As-Code
+   |  +--unattendXML
+   |  |  +--unattend-UEFI-xxxG.xml
+   |  |  \...      
+   |  +--Drivers
+   |  |  +--HP_WKS_Z2_G4_W10_x64_6.00.A.1
+   |  |  |  \--...
+   |  |  \...
+   |  +--oobeSystem
+   |  |  +--Langpacks
+   |  |  |  +--Win11
+   |  |  |  |  +--README.md
+   |  |  |  |  \--Microsoft-Windows-Client-Language-Pack_x64_zh-cn.cab
+   |  |  |  \--...
+   |  |  +--Software
+   |  |  |  +--Chocolatey
+   |  |  |  |  +----chocolatey.1.0.1.nupkg  ⬅️ you got this in step 10
+   |  |  |  |  \--...
+   |  |  |  \--...
+   |  |  \--...
+   |  \--...
+   +--ISO
+   |  \--Windows
+   |     \--Win11_EnglishInternational_x64v1.iso
+   \--ventoy
+      \--ventoy.json
+   ```
    ### 11. (Optional) MS office
-   For MS office offline deployment, run script [.\oobeSystem\Software\MSOffice\Download-Office.bat](oobeSystem/Software/MSOffice/Download-Office.bat) to download office installation files
+   For MS office offline deployment, run script [.\oobeSystem\Software\MSOffice\Download-Office.bat](oobeSystem/Software/MSOffice/Download-Office.bat) to download office installation files.  
+   After this step, you got this
+   ```
+   E:\
+   +--WinOS-Deploy-As-Code
+   |  +--unattendXML
+   |  |  +--unattend-UEFI-xxxG.xml
+   |  |  \...      
+   |  +--Drivers
+   |  |  +--HP_WKS_Z2_G4_W10_x64_6.00.A.1
+   |  |  |  \--...
+   |  |  \...
+   |  +--oobeSystem
+   |  |  +--Langpacks
+   |  |  |  +--Win11
+   |  |  |  |  +--README.md
+   |  |  |  |  \--Microsoft-Windows-Client-Language-Pack_x64_xx-xx.cab
+   |  |  |  \--...
+   |  |  +--Software
+   |  |  |  +--Chocolatey
+   |  |  |  |  +----chocolatey.1.0.1.nupkg
+   |  |  |  |  \--...
+   |  |  |  +--MSOffice
+   |  |  |  |  +--Office                                ⬅️
+   |  |  |  |  |  \--...                                ⬅️ you got these in step 11
+   |  |  |  |  +--officedeploymenttool_xxxxx-xxxxx.exe  ⬅️
+   |  |  |  |  \--...
+   |  |  |  \--...
+   |  |  \--...
+   |  \--...
+   +--ISO
+   |  \--Windows
+   |     \--Win11_EnglishInternational_x64v1.iso
+   \--ventoy
+      \--ventoy.json
+   ```
    ### 12. Prepare done
+   Finaly, you got this
+   ```
+   E:\
+   +--WinOS-Deploy-As-Code                              ⬅️ you got these in step 4
+   |  +--unattendXML
+   |  |  +--unattend-UEFI-xxxG.xml                      ⬅️ you got this in step 6
+   |  |  \...      
+   |  +--Drivers
+   |  |  +--HP_WKS_Z2_G4_W10_x64_6.00.A.1               ⬅️ you got thess in step 8
+   |  |  |  \--...                                      ↙️
+   |  |  \...
+   |  +--oobeSystem
+   |  |  +--Langpacks
+   |  |  |  +--Win11
+   |  |  |  |  +--README.md
+   |  |  |  |  \--Microsoft-Windows-Client-Language-Pack_x64_xx-xx.cab  ⬅️ you got this in step 9
+   |  |  |  \--...
+   |  |  +--Software
+   |  |  |  +--Chocolatey
+   |  |  |  |  +----chocolatey.1.0.1.nupkg              ⬅️ you got this in step 10
+   |  |  |  |  \--...
+   |  |  |  +--MSOffice
+   |  |  |  |  +--Office                                ↖️
+   |  |  |  |  |  \--...                                ⬅️ you got these in step 11
+   |  |  |  |  +--officedeploymenttool_xxxxx-xxxxx.exe  ↙️
+   |  |  |  |  \--...
+   |  |  |  \--...
+   |  |  \--...
+   |  \--...
+   +--ISO
+   |  \--Windows
+   |     \--Win11_EnglishInternational_x64v1.iso        ⬅️ you got this in step 5
+   \--ventoy                                            ⬅️ you got these in step 7
+      \--ventoy.json                                    ↙️
+   ```
    Plug in this USB drive to the target machine, boot from this USB drive, then Ventoy get load, select the related Windows ISO, and related unattend xml file according to the disk size, then the installation process will start.
 
 
