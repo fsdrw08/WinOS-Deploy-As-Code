@@ -140,7 +140,7 @@ process {
 
 end {
     # https://stackoverflow.com/questions/45470999/powershell-try-catch-and-retry
-    function Retry-Command {
+    function Restart-Command {
         [CmdletBinding()]
         Param(
             [Parameter(Position=0, Mandatory=$true)]
@@ -197,7 +197,7 @@ end {
             switch($opt) {
                 0 { 
                     Write-Host "download now" -ForegroundColor Yellow
-                    Retry-Command -ScriptBlock {
+                    Restart-Command -ScriptBlock {
                         $WebClient = New-Object System.Net.WebClient
                         $WebClient.DownloadFile($DownloadLink, (Join-Path -Path $Path -ChildPath $isoFileName))
                     }
