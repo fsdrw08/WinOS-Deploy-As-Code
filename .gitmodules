@@ -2,3 +2,6 @@
 	path = oobeSystem/Software/Chocolatey
 	url = https://github.com/fsdrw08/Install-ChocoOffline.git
 	branch = main
+[submodule "Fido"]
+	path = Fido
+	url = https://github.com/pbatard/Fido.git
