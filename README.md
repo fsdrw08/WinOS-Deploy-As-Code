@@ -268,3 +268,7 @@ Prerequest: portable usb drive (at least 8G+, 32G is recommanded) with no data k
 [Apply unattended answer file to Windows 10 install media](https://www.tenforums.com/tutorials/131765-apply-unattended-answer-file-windows-10-install-media.html): Tutorial to config a unattend xml file  
 [Create media for automated unattended install of Windows 10](https://www.tenforums.com/tutorials/96683-create-media-automated-unattended-install-windows-10-a.html)
 
+```powershell
+git submodule add https://github.com/fsdrw08/Install-ChocoOffline.git oobeSystem/Software/Chocolatey
+git submodule add https://github.com/pbatard/Fido.git
+```
