@@ -6,8 +6,10 @@
         {
             "parent": "/ISO/Windows",
             "template":[
-                "/WinOS-Deploy-As-Code/unattendXML/unattend-UEFI-256G.xml",
-                "/WinOS-Deploy-As-Code/unattendXML/unattend-UEFI-512G.xml"
+                "/WinOS-Deploy-As-Code/unattendedXML/unattended-UEFI-256G-EN.xml",
+                "/WinOS-Deploy-As-Code/unattendedXML/unattended-UEFI-256G-CN.xml",
+                "/WinOS-Deploy-As-Code/unattendedXML/unattended-UEFI-512G-EN.xml",
+                "/WinOS-Deploy-As-Code/unattendedXML/unattended-UEFI-512G-CN.xml"
             ]
         }
     ]

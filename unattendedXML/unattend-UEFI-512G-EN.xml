@@ -12,7 +12,7 @@
             <UserLocale>en-US</UserLocale>
         </component>
         <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-            <!-- <DiskConfiguration>
+            <DiskConfiguration>
                 <Disk wcm:action="add">
                     <DiskID>0</DiskID>
                     <WillWipeDisk>true</WillWipeDisk>
@@ -28,24 +28,29 @@
                             <Type>MSR</Type>
                         </CreatePartition>
                         <CreatePartition wcm:action="add">
-                            <Extend>true</Extend>
-                            <Order>4</Order>
-                            <Type>Primary</Type>
-                            <Size>500</Size>
-                        </CreatePartition>
-                        <CreatePartition wcm:action="add">
                             <Type>Primary</Type>
                             <Order>3</Order>
+                            <Size>486406</Size>
+                        </CreatePartition>
+                        <!-- ref: https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions?view=windows-11#recovery-tools-partition 
+                        We recommend that you place this partition immediately after the Windows partition. 
+                        This allows Windows to modify and recreate the partition later if future updates require a larger recovery image.-->
+                        <CreatePartition wcm:action="add">
+                            <Type>Primary</Type>
+                            <Order>4</Order>
                             <Extend>true</Extend>
                         </CreatePartition>
                     </CreatePartitions>
                     <ModifyPartitions>
                         <ModifyPartition wcm:action="add">
-                            <Format>NTFS</Format>
-                            <Label>WinRE</Label>
-                            <Order>4</Order>
-                            <PartitionID>4</PartitionID>
-                            <TypeID>DE94BBA4-06D1-4D40-A16A-BFD50179D6AC</TypeID>
+                            <Label>System</Label>
+                            <Format>FAT32</Format>
+                            <Order>1</Order>
+                            <PartitionID>1</PartitionID>
+                        </ModifyPartition>
+                        <ModifyPartition wcm:action="add">
+                            <Order>2</Order>
+                            <PartitionID>2</PartitionID>
                         </ModifyPartition>
                         <ModifyPartition wcm:action="add">
                             <Format>NTFS</Format>
@@ -55,24 +60,21 @@
                             <PartitionID>3</PartitionID>
                         </ModifyPartition>
                         <ModifyPartition wcm:action="add">
-                            <Order>2</Order>
-                            <PartitionID>2</PartitionID>
-                        </ModifyPartition>
-                        <ModifyPartition wcm:action="add">
-                            <Label>System</Label>
-                            <Format>FAT32</Format>
-                            <Order>1</Order>
-                            <PartitionID>1</PartitionID>
+                            <Format>NTFS</Format>
+                            <Label>WinRE</Label>
+                            <Order>4</Order>
+                            <PartitionID>4</PartitionID>
+                            <TypeID>DE94BBA4-06D1-4D40-A16A-BFD50179D6AC</TypeID>
                         </ModifyPartition>
                     </ModifyPartitions>
                 </Disk>
                 <WillShowUI>OnError</WillShowUI>
-            </DiskConfiguration> -->
+            </DiskConfiguration>
             <ImageInstall>
                 <OSImage>
                     <InstallTo>
-                        <PartitionID>3</PartitionID>
                         <DiskID>0</DiskID>
+                        <PartitionID>3</PartitionID>
                     </InstallTo>
                     <InstallToAvailablePartition>false</InstallToAvailablePartition>
                     <WillShowUI>OnError</WillShowUI>
@@ -80,7 +82,10 @@
             </ImageInstall>
             <UserData>
                 <ProductKey>
+                    <!-- Windows 11 Pro -->
                     <Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
+                    <!-- Windows 11 Home -->
+					<!-- <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key> -->
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
                 <Organization></Organization>

@@ -30,7 +30,7 @@
                         <CreatePartition wcm:action="add">
                             <Type>Primary</Type>
                             <Order>3</Order>
-                            <Size>486406</Size>
+                            <Size>240646</Size>
                         </CreatePartition>
                         <!-- ref: https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/configure-uefigpt-based-hard-drive-partitions?view=windows-11#recovery-tools-partition 
                         We recommend that you place this partition immediately after the Windows partition. 
@@ -68,21 +68,24 @@
                         </ModifyPartition>
                     </ModifyPartitions>
                 </Disk>
-                <WillShowUI>Never</WillShowUI>
+                <WillShowUI>OnError</WillShowUI>
             </DiskConfiguration>
             <ImageInstall>
                 <OSImage>
                     <InstallTo>
-                        <PartitionID>3</PartitionID>
                         <DiskID>0</DiskID>
+                        <PartitionID>3</PartitionID>
                     </InstallTo>
                     <InstallToAvailablePartition>false</InstallToAvailablePartition>
-                    <WillShowUI>Never</WillShowUI>
+                    <WillShowUI>OnError</WillShowUI>
                 </OSImage>
             </ImageInstall>
             <UserData>
                 <ProductKey>
+                    <!-- Windows 11 Pro -->
                     <Key>VK7JG-NPHTM-C97JM-9MPGT-3V66T</Key>
+                    <!-- Windows 11 Home -->
+					<!-- <Key>YTMG3-N6DKC-DKB77-7M9GH-8HVX7</Key> -->
                 </ProductKey>
                 <AcceptEula>true</AcceptEula>
                 <Organization></Organization>
