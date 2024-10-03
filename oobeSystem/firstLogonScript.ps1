@@ -90,21 +90,21 @@ ipconfig /registerdns
 $WorkingPath = $PSScriptRoot
 # $WorkingPath = "D:\WinOS-Deploy-As-Code\oobeSystem"
 
-"# install language package"
-$Windows11 = [System.Environment]::OSVersion.Version.Build -ge "22000"
-switch ($Windows11) {
-  "$True" {
-      $LangpackPath = "$WorkingPath\Langpacks\Win11"
-    }
-  "$False" {
-      $LangpackPath = "$WorkingPath\Langpacks\Win10"
-    }
-}
-$LangLabel = "zh-CN"
-if ((-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*$LangLabel*"})) -and `
-    (Test-Path (Join-Path -Path $LangpackPath -ChildPath "Microsoft-Windows-Client-Language-Pack*"))) {
-  Add-WindowsPackage -Online -PackagePath "$LangpackPath\Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab"
-}
+# "# install language package"
+# $Windows11 = [System.Environment]::OSVersion.Version.Build -ge "22000"
+# switch ($Windows11) {
+#   "$True" {
+#       $LangpackPath = "$WorkingPath\Langpacks\Win11"
+#     }
+#   "$False" {
+#       $LangpackPath = "$WorkingPath\Langpacks\Win10"
+#     }
+# }
+# $LangLabel = "zh-CN"
+# if ((-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*$LangLabel*"})) -and `
+#     (Test-Path (Join-Path -Path $LangpackPath -ChildPath "Microsoft-Windows-Client-Language-Pack*"))) {
+#   Add-WindowsPackage -Online -PackagePath "$LangpackPath\Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab"
+# }
 
 "# change system region"
 Set-WinSystemLocale -SystemLocale $LangLabel
