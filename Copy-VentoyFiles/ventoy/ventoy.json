@@ -11,6 +11,7 @@
                 "/WinOS-Deploy-As-Code/unattendedXML/unattended-UEFI-256G-EN.xml",
                 "/WinOS-Deploy-As-Code/unattendedXML/unattended-UEFI-256G-CN.xml",
                 "/WinOS-Deploy-As-Code/unattendedXML/unattended-UEFI-512G-EN.xml",
+                "/WinOS-Deploy-As-Code/unattendedXML/unattended-UEFI-512G-EN-disk2.xml",
                 "/WinOS-Deploy-As-Code/unattendedXML/unattended-UEFI-512G-CN.xml"
             ]
         }
