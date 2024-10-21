@@ -88,23 +88,34 @@ Start-Sleep -Seconds 3
 ipconfig /registerdns
 
 $WorkingPath = $PSScriptRoot
-# $WorkingPath = "D:\WinOS-Deploy-As-Code\oobeSystem"
+# $WorkingPath = "E:\WinOS-Deploy-As-Code\oobeSystem"
 
 # "# install language package"
-# $Windows11 = [System.Environment]::OSVersion.Version.Build -ge "22000"
-# switch ($Windows11) {
-#   "$True" {
-#       $LangpackPath = "$WorkingPath\Langpacks\Win11"
-#     }
-#   "$False" {
-#       $LangpackPath = "$WorkingPath\Langpacks\Win10"
-#     }
-# }
-# $LangLabel = "zh-CN"
-# if ((-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*$LangLabel*"})) -and `
-#     (Test-Path (Join-Path -Path $LangpackPath -ChildPath "Microsoft-Windows-Client-Language-Pack*"))) {
-#   Add-WindowsPackage -Online -PackagePath "$LangpackPath\Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab"
-# }
+[string]$OSVersion = [System.Environment]::OSVersion.Version.Build
+# https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_switch?view=powershell-7.4#examples
+# https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information
+switch -Wildcard ($OSVersion) {
+  "261*" {
+      $LangpackPath = "$WorkingPath\Langpacks\Win11-24H2"
+    }
+  "226*" {
+      $LangpackPath = "$WorkingPath\Langpacks\Win11-22H2"
+    }
+  "190*" {
+      $LangpackPath = "$WorkingPath\Langpacks\Win10"
+    }
+}
+$LangLabel = "zh-CN"
+if (-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*$LangLabel*"})) {
+  if (Test-Path (Join-Path -Path $LangpackPath -ChildPath "Microsoft-Windows-Client-Language-Pack*$LangLabel*")) {
+    Add-WindowsPackage -Online -PackagePath `"$LangpackPath\Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab`"
+  }
+  else {
+    "no such package in $(Join-Path -Path $LangpackPath -ChildPath "Microsoft-Windows-Client-Language-Pack*$LangLabel*")"
+  }
+} else {
+  "language package `"Microsoft-Windows-Client-Language-Pack*$LangLabel*`" already installed"
+}
 
 "# change system region"
 Set-WinSystemLocale -SystemLocale $LangLabel
@@ -117,9 +128,20 @@ if (Test-Path -Path "$WorkingPath\Software\Chocolatey\chocolatey*nupkg") {
 "Config WinRM"
 & $WorkingPath\Config\ConfigureRemotingForAnsible.ps1
 
-# "# Install 7zip"
-# choco install 7zip.install --source="$WorkingPath\Software\Chocolatey\" -y
-#. MSIEXEC.EXE /i "D:\Install\7z1900-x64.msi" /qn /wait
+"Install git for windows"
+$gitSetupExeWildCard="$WorkingPath\Software\Git\Git-*-bit.exe"
+if (Test-Path -Path $gitSetupExeWildCard) {
+  $gitSetupExe = (Get-Item -Path $gitSetupExeWildCard)[-1].FullName
+  Start-Process -FilePath $gitSetupExe -ArgumentList "/SILENT" -Wait
+}
+
+"# Install 7zip"
+$7zipSetupExeWildCard="$WorkingPath\Software\7-Zip\7z*.exe"
+if (Test-Path -Path $7zipSetupExeWildCard) {
+  $7zipSetupExe = (Get-Item -Path $7zipSetupExeWildCard)[-1].FullName
+  # https://www.7-zip.org/faq.html
+  Start-Process -FilePath $7zipSetupExe -ArgumentList "/S" -Wait
+}
 
 # "#5. Install AdobeDC"
 # Start-Process -FilePath msiexec -ArgumentList "/i `"$WorkingPath\Software\ReaderDC\AcroRead.msi`" TRANSFORMS=`"D:\Install\ReaderDC\AcroRead.mst`" /qn" -Wait
