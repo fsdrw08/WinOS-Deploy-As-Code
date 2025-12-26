@@ -88,7 +88,7 @@ Start-Sleep -Seconds 3
 ipconfig /registerdns
 
 $WorkingPath = $PSScriptRoot
-# $WorkingPath = "E:\WinOS-Deploy-As-Code\oobeSystem"
+# $WorkingPath = "D:\WinOS-Deploy-As-Code\oobeSystem"
 
 # "# install language package"
 [string]$OSVersion = [System.Environment]::OSVersion.Version.Build
@@ -108,9 +108,9 @@ switch -Wildcard ($OSVersion) {
       $LangpackDir = "$WorkingPath\Langpacks\Win10"
     }
 }
+$LangLabel = "en-us"
 $LangpackPath = Join-Path -Path $LangpackDir -ChildPath "Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab"
 $LangpackPath
-$LangLabel = "en-us"
 if (-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*$LangLabel*"})) {
   if (Test-Path $LangpackPath) {
     Add-WindowsPackage -Online -PackagePath $LangpackPath
