@@ -187,7 +187,7 @@ Prerequest: portable usb drive (at least 8G+, 32G is recommanded) with no data k
       \--ventoy.json
    ```
    ### 11. (Optional) MS office
-   For MS office offline deployment, run script [.\oobeSystem\Software\MSOffice\Download-Office.bat](oobeSystem/Software/MSOffice/Download-Office.bat) to download office installation files.  
+   For MS office offline deployment, run script [.\oobeSystem\Software\MSOffice\Get-MSOffice.bat](oobeSystem/Software/MSOffice/Get-MSOffice.bat) to download office installation files.  
    After this step, you got this
    ```
    E:\

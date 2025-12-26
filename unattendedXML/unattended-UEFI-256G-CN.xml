@@ -19,7 +19,10 @@
                     <CreatePartitions>
                         <CreatePartition wcm:action="add">
                             <Order>1</Order>
-                            <Size>100</Size>
+                            <!-- ref: https://www.reddit.com/r/sysadmin/comments/13yeh3d/windows_11_new_efi_system_partition_requirement/ -->
+                            <!-- According to Microsoft, the minimum size of the EFI partition should be 100MB, as outlined in THIS article. 
+                            While there seems to be no standard, manufacturers and the default Windows installation tend to set it around 500MB. It -->
+                            <Size>500</Size>
                             <Type>EFI</Type>
                         </CreatePartition>
                         <CreatePartition wcm:action="add">

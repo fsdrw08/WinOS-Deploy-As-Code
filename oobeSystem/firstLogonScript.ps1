@@ -95,23 +95,28 @@ $WorkingPath = $PSScriptRoot
 # https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_switch?view=powershell-7.4#examples
 # https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information
 switch -Wildcard ($OSVersion) {
+  "262*" {
+      $LangpackDir = "$WorkingPath\Langpacks\Win11-24H2"
+    }
   "261*" {
-      $LangpackPath = "$WorkingPath\Langpacks\Win11-24H2"
+      $LangpackDir = "$WorkingPath\Langpacks\Win11-24H2"
     }
   "226*" {
-      $LangpackPath = "$WorkingPath\Langpacks\Win11-22H2"
+      $LangpackDir = "$WorkingPath\Langpacks\Win11-22H2"
     }
   "190*" {
-      $LangpackPath = "$WorkingPath\Langpacks\Win10"
+      $LangpackDir = "$WorkingPath\Langpacks\Win10"
     }
 }
-$LangLabel = "zh-CN"
+$LangpackPath = Join-Path -Path $LangpackDir -ChildPath "Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab"
+$LangpackPath
+$LangLabel = "en-us"
 if (-not [bool](Get-WindowsPackage -Online | Where-Object {$_.PackageName -like "*languagepack*$LangLabel*"})) {
-  if (Test-Path (Join-Path -Path $LangpackPath -ChildPath "Microsoft-Windows-Client-Language-Pack*$LangLabel*")) {
-    Add-WindowsPackage -Online -PackagePath `"$LangpackPath\Microsoft-Windows-Client-Language-Pack_x64_$LangLabel.cab`"
+  if (Test-Path $LangpackPath) {
+    Add-WindowsPackage -Online -PackagePath $LangpackPath
   }
   else {
-    "no such package in $(Join-Path -Path $LangpackPath -ChildPath "Microsoft-Windows-Client-Language-Pack*$LangLabel*")"
+    "no such package in $LangpackPath"
   }
 } else {
   "language package `"Microsoft-Windows-Client-Language-Pack*$LangLabel*`" already installed"

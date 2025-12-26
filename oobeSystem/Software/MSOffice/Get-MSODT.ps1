@@ -7,7 +7,7 @@ begin {
         Invoke-WebRequest -uri (
             (
                 Invoke-WebRequest -Uri $url -UseBasicParsing
-            ).Links.Href | Where-Object -FilterScript {$_ -match "download/confirmation"}
+            ).Links.Href | Where-Object -FilterScript {$_ -match "download/details"} | Select-Object -First 1
         ) -UseBasicParsing
     ).links.href | Where-Object {$_ -like "*exe"} | Select-Object -Unique
         # $workingPath = "D:\WinOS-Deploy-As-Code\oobeSystem\Software\MSOffice"
